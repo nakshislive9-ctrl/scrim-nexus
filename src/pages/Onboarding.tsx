@@ -3,10 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ChevronLeft, Copy, Check, Gamepad2, Map, Link2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-const GAMES = ["Valorant", "CS2", "Overwatch 2", "League of Legends", "Rocket League"];
-const RANKS = ["Iron", "Bronze", "Silver", "Gold", "Platinum", "Diamond", "Ascendant", "Immortal", "Radiant"];
-const MAPS = ["Ascent", "Bind", "Haven", "Split", "Icebox", "Lotus", "Fracture"];
+import { GAMES, getRanksForGame, getMapsForGame } from "@/lib/gameData";
 
 type MapStatus = "strong" | "weak" | null;
 
@@ -101,7 +98,7 @@ export default function Onboarding() {
                 <label className="text-xs font-mono text-muted-foreground tracking-wider uppercase block mb-2">Primary Game</label>
                 <select
                   value={game}
-                  onChange={(e) => setGame(e.target.value)}
+                  onChange={(e) => { setGame(e.target.value); setRank(""); setMapPool({}); }}
                   className="w-full bg-muted/50 border border-border/50 rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
                 >
                   <option value="">Select game...</option>
@@ -114,9 +111,10 @@ export default function Onboarding() {
                   value={rank}
                   onChange={(e) => setRank(e.target.value)}
                   className="w-full bg-muted/50 border border-border/50 rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  disabled={!game}
                 >
-                  <option value="">Select rank...</option>
-                  {RANKS.map((r) => <option key={r} value={r}>{r}</option>)}
+                  <option value="">{game ? "Select rank..." : "Select a game first..."}</option>
+                  {getRanksForGame(game).map((r) => <option key={r} value={r}>{r}</option>)}
                 </select>
               </div>
             </div>
@@ -130,7 +128,8 @@ export default function Onboarding() {
               </div>
               <p className="text-sm text-muted-foreground">Click to cycle: <span className="text-foreground">Neutral</span> → <span className="text-success">Strong</span> → <span className="text-destructive">Weak</span></p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {MAPS.map((map) => {
+                {!game && <p className="col-span-full text-sm text-muted-foreground text-center py-4">Select a game first to see available maps</p>}
+                {getMapsForGame(game).map((map) => {
                   const status = mapPool[map];
                   return (
                     <button

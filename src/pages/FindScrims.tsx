@@ -3,9 +3,8 @@ import { Search, Filter, Crosshair, Shield, Globe, Clock, ChevronDown } from "lu
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { GAMES, getRanksForGame } from "@/lib/gameData";
 
-const GAMES = ["Valorant", "CS2", "Overwatch 2", "League of Legends", "Rocket League"];
-const RANKS = ["Iron", "Bronze", "Silver", "Gold", "Platinum", "Diamond", "Ascendant", "Immortal", "Radiant"];
 const REGIONS = ["NA East", "NA West", "EU West", "EU East", "Asia", "OCE"];
 
 interface ScrimListing {
@@ -22,9 +21,9 @@ interface ScrimListing {
 const mockListings: ScrimListing[] = [
   { id: "1", teamName: "Team Phantom", game: "Valorant", rank: "Immortal", region: "NA East", reliability: 92, timeSlot: "8:00 PM EST", mapPreferences: ["Ascent", "Haven"] },
   { id: "2", teamName: "Eclipse Gaming", game: "Valorant", rank: "Diamond", region: "EU West", reliability: 87, timeSlot: "9:30 PM CET", mapPreferences: ["Bind", "Split"] },
-  { id: "3", teamName: "Midnight Wolves", game: "CS2", rank: "Ascendant", region: "NA West", reliability: 95, timeSlot: "7:00 PM PST", mapPreferences: ["Mirage", "Inferno"] },
+  { id: "3", teamName: "Midnight Wolves", game: "CS2", rank: "Global Elite", region: "NA West", reliability: 95, timeSlot: "7:00 PM PST", mapPreferences: ["Mirage", "Inferno"] },
   { id: "4", teamName: "Crimson Tigers", game: "Valorant", rank: "Platinum", region: "Asia", reliability: 78, timeSlot: "10:00 PM JST", mapPreferences: ["Lotus", "Fracture"] },
-  { id: "5", teamName: "Arctic Storm", game: "Overwatch 2", rank: "Diamond", region: "EU East", reliability: 91, timeSlot: "8:00 PM EET", mapPreferences: ["Havana", "Oasis"] },
+  { id: "5", teamName: "Arctic Storm", game: "Overwatch 2", rank: "Master", region: "EU East", reliability: 91, timeSlot: "8:00 PM EET", mapPreferences: ["Havana", "Circuit Royal"] },
   { id: "6", teamName: "Nova Esports", game: "Valorant", rank: "Radiant", region: "NA East", reliability: 98, timeSlot: "9:00 PM EST", mapPreferences: ["Ascent", "Icebox"] },
 ];
 
@@ -39,6 +38,8 @@ export default function FindScrims() {
   const [filterGame, setFilterGame] = useState("");
   const [filterRank, setFilterRank] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+
+  const availableRanks = filterGame ? getRanksForGame(filterGame) : [];
 
   const filtered = mockListings.filter((l) => {
     if (search && !l.teamName.toLowerCase().includes(search.toLowerCase())) return false;
@@ -78,7 +79,7 @@ export default function FindScrims() {
             <div className="flex flex-wrap gap-3 pt-2 border-t border-border/50">
               <select
                 value={filterGame}
-                onChange={(e) => setFilterGame(e.target.value)}
+                onChange={(e) => { setFilterGame(e.target.value); setFilterRank(""); }}
                 className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
               >
                 <option value="">All Games</option>
@@ -88,9 +89,10 @@ export default function FindScrims() {
                 value={filterRank}
                 onChange={(e) => setFilterRank(e.target.value)}
                 className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+                disabled={!filterGame}
               >
-                <option value="">All Ranks</option>
-                {RANKS.map((r) => <option key={r} value={r}>{r}</option>)}
+                <option value="">{filterGame ? "All Ranks" : "Select a game first"}</option>
+                {availableRanks.map((r) => <option key={r} value={r}>{r}</option>)}
               </select>
               {(filterGame || filterRank) && (
                 <Button variant="ghost" size="sm" onClick={() => { setFilterGame(""); setFilterRank(""); }} className="text-muted-foreground text-xs">
