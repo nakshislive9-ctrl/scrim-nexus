@@ -111,9 +111,10 @@ export default function Onboarding() {
                   value={rank}
                   onChange={(e) => setRank(e.target.value)}
                   className="w-full bg-muted/50 border border-border/50 rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  disabled={!game}
                 >
-                  <option value="">Select rank...</option>
-                  {RANKS.map((r) => <option key={r} value={r}>{r}</option>)}
+                  <option value="">{game ? "Select rank..." : "Select a game first..."}</option>
+                  {getRanksForGame(game).map((r) => <option key={r} value={r}>{r}</option>)}
                 </select>
               </div>
             </div>
