@@ -81,12 +81,19 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="p-4">
-        {!collapsed && (
-          <div className="glass-panel p-3 text-center">
-            <p className="text-[10px] font-mono text-muted-foreground tracking-wider uppercase">Season 4 Active</p>
+      <SidebarFooter className="p-4 space-y-3">
+        {!collapsed && user && (
+          <div className="glass-panel p-3">
+            <p className="text-[10px] font-mono text-muted-foreground tracking-wider uppercase truncate">{user.email}</p>
           </div>
         )}
+        <button
+          onClick={signOut}
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all text-sm"
+        >
+          <LogOut className="h-4 w-4 shrink-0" />
+          {!collapsed && <span className="font-medium">Sign Out</span>}
+        </button>
       </SidebarFooter>
     </Sidebar>
   );
