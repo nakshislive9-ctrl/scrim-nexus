@@ -80,7 +80,7 @@ export default function FindScrims() {
             <div className="flex flex-wrap gap-3 pt-2 border-t border-border/50">
               <select
                 value={filterGame}
-                onChange={(e) => { setFilterGame(e.target.value); setFilterRank(""); }}
+                onChange={(e) => { setFilterGame(e.target.value); setFilterRank(""); setFilterRegion(""); }}
                 className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
               >
                 <option value="">All Games</option>
