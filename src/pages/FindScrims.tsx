@@ -3,9 +3,7 @@ import { Search, Filter, Crosshair, Shield, Globe, Clock, ChevronDown } from "lu
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { GAMES, getRanksForGame } from "@/lib/gameData";
-
-const REGIONS = ["NA East", "NA West", "EU West", "EU East", "Asia", "OCE"];
+import { GAMES, getRanksForGame, getRegionsForGame } from "@/lib/gameData";
 
 interface ScrimListing {
   id: string;
@@ -37,14 +35,17 @@ export default function FindScrims() {
   const [search, setSearch] = useState("");
   const [filterGame, setFilterGame] = useState("");
   const [filterRank, setFilterRank] = useState("");
+  const [filterRegion, setFilterRegion] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
   const availableRanks = filterGame ? getRanksForGame(filterGame) : [];
+  const availableRegions = filterGame ? getRegionsForGame(filterGame) : [];
 
   const filtered = mockListings.filter((l) => {
     if (search && !l.teamName.toLowerCase().includes(search.toLowerCase())) return false;
     if (filterGame && l.game !== filterGame) return false;
     if (filterRank && l.rank !== filterRank) return false;
+    if (filterRegion && l.region !== filterRegion) return false;
     return true;
   });
 
@@ -79,7 +80,7 @@ export default function FindScrims() {
             <div className="flex flex-wrap gap-3 pt-2 border-t border-border/50">
               <select
                 value={filterGame}
-                onChange={(e) => { setFilterGame(e.target.value); setFilterRank(""); }}
+                onChange={(e) => { setFilterGame(e.target.value); setFilterRank(""); setFilterRegion(""); }}
                 className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
               >
                 <option value="">All Games</option>
@@ -94,8 +95,17 @@ export default function FindScrims() {
                 <option value="">{filterGame ? "All Ranks" : "Select a game first"}</option>
                 {availableRanks.map((r) => <option key={r} value={r}>{r}</option>)}
               </select>
-              {(filterGame || filterRank) && (
-                <Button variant="ghost" size="sm" onClick={() => { setFilterGame(""); setFilterRank(""); }} className="text-muted-foreground text-xs">
+              <select
+                value={filterRegion}
+                onChange={(e) => setFilterRegion(e.target.value)}
+                className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+                disabled={!filterGame}
+              >
+                <option value="">{filterGame ? "All Regions" : "Select a game first"}</option>
+                {availableRegions.map((r) => <option key={r} value={r}>{r}</option>)}
+              </select>
+              {(filterGame || filterRank || filterRegion) && (
+                <Button variant="ghost" size="sm" onClick={() => { setFilterGame(""); setFilterRank(""); setFilterRegion(""); }} className="text-muted-foreground text-xs">
                   Clear All
                 </Button>
               )}
@@ -139,7 +149,7 @@ export default function FindScrims() {
             <div className="glass-panel p-12 text-center">
               <Crosshair className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
               <p className="text-sm text-muted-foreground">No scrims match your filters</p>
-              <Button variant="ghost" size="sm" className="mt-3" onClick={() => { setSearch(""); setFilterGame(""); setFilterRank(""); }}>Reset Filters</Button>
+              <Button variant="ghost" size="sm" className="mt-3" onClick={() => { setSearch(""); setFilterGame(""); setFilterRank(""); setFilterRegion(""); }}>Reset Filters</Button>
             </div>
           )}
         </StaggerContainer>
