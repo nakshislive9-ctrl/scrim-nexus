@@ -95,8 +95,17 @@ export default function FindScrims() {
                 <option value="">{filterGame ? "All Ranks" : "Select a game first"}</option>
                 {availableRanks.map((r) => <option key={r} value={r}>{r}</option>)}
               </select>
-              {(filterGame || filterRank) && (
-                <Button variant="ghost" size="sm" onClick={() => { setFilterGame(""); setFilterRank(""); }} className="text-muted-foreground text-xs">
+              <select
+                value={filterRegion}
+                onChange={(e) => setFilterRegion(e.target.value)}
+                className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+                disabled={!filterGame}
+              >
+                <option value="">{filterGame ? "All Regions" : "Select a game first"}</option>
+                {availableRegions.map((r) => <option key={r} value={r}>{r}</option>)}
+              </select>
+              {(filterGame || filterRank || filterRegion) && (
+                <Button variant="ghost" size="sm" onClick={() => { setFilterGame(""); setFilterRank(""); setFilterRegion(""); }} className="text-muted-foreground text-xs">
                   Clear All
                 </Button>
               )}
