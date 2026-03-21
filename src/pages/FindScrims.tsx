@@ -21,9 +21,9 @@ interface ScrimListing {
 const mockListings: ScrimListing[] = [
   { id: "1", teamName: "Team Phantom", game: "Valorant", rank: "Immortal", region: "NA East", reliability: 92, timeSlot: "8:00 PM EST", mapPreferences: ["Ascent", "Haven"] },
   { id: "2", teamName: "Eclipse Gaming", game: "Valorant", rank: "Diamond", region: "EU West", reliability: 87, timeSlot: "9:30 PM CET", mapPreferences: ["Bind", "Split"] },
-  { id: "3", teamName: "Midnight Wolves", game: "CS2", rank: "Ascendant", region: "NA West", reliability: 95, timeSlot: "7:00 PM PST", mapPreferences: ["Mirage", "Inferno"] },
+  { id: "3", teamName: "Midnight Wolves", game: "CS2", rank: "Global Elite", region: "NA West", reliability: 95, timeSlot: "7:00 PM PST", mapPreferences: ["Mirage", "Inferno"] },
   { id: "4", teamName: "Crimson Tigers", game: "Valorant", rank: "Platinum", region: "Asia", reliability: 78, timeSlot: "10:00 PM JST", mapPreferences: ["Lotus", "Fracture"] },
-  { id: "5", teamName: "Arctic Storm", game: "Overwatch 2", rank: "Diamond", region: "EU East", reliability: 91, timeSlot: "8:00 PM EET", mapPreferences: ["Havana", "Oasis"] },
+  { id: "5", teamName: "Arctic Storm", game: "Overwatch 2", rank: "Master", region: "EU East", reliability: 91, timeSlot: "8:00 PM EET", mapPreferences: ["Havana", "Circuit Royal"] },
   { id: "6", teamName: "Nova Esports", game: "Valorant", rank: "Radiant", region: "NA East", reliability: 98, timeSlot: "9:00 PM EST", mapPreferences: ["Ascent", "Icebox"] },
 ];
 
