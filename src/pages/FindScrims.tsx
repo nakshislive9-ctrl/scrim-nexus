@@ -39,6 +39,8 @@ export default function FindScrims() {
   const [filterRank, setFilterRank] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
+  const availableRanks = filterGame ? getRanksForGame(filterGame) : [];
+
   const filtered = mockListings.filter((l) => {
     if (search && !l.teamName.toLowerCase().includes(search.toLowerCase())) return false;
     if (filterGame && l.game !== filterGame) return false;
