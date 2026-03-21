@@ -149,7 +149,7 @@ export default function FindScrims() {
             <div className="glass-panel p-12 text-center">
               <Crosshair className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
               <p className="text-sm text-muted-foreground">No scrims match your filters</p>
-              <Button variant="ghost" size="sm" className="mt-3" onClick={() => { setSearch(""); setFilterGame(""); setFilterRank(""); }}>Reset Filters</Button>
+              <Button variant="ghost" size="sm" className="mt-3" onClick={() => { setSearch(""); setFilterGame(""); setFilterRank(""); setFilterRegion(""); }}>Reset Filters</Button>
             </div>
           )}
         </StaggerContainer>
