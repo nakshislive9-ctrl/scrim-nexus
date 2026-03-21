@@ -3,10 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ChevronLeft, Copy, Check, Gamepad2, Map, Link2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-const GAMES = ["Valorant", "CS2", "Overwatch 2", "League of Legends", "Rocket League"];
-const RANKS = ["Iron", "Bronze", "Silver", "Gold", "Platinum", "Diamond", "Ascendant", "Immortal", "Radiant"];
-const MAPS = ["Ascent", "Bind", "Haven", "Split", "Icebox", "Lotus", "Fracture"];
+import { GAMES, getRanksForGame, getMapsForGame } from "@/lib/gameData";
 
 type MapStatus = "strong" | "weak" | null;
 
