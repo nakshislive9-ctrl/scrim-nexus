@@ -98,7 +98,7 @@ export default function Onboarding() {
                 <label className="text-xs font-mono text-muted-foreground tracking-wider uppercase block mb-2">Primary Game</label>
                 <select
                   value={game}
-                  onChange={(e) => setGame(e.target.value)}
+                  onChange={(e) => { setGame(e.target.value); setRank(""); setMapPool({}); }}
                   className="w-full bg-muted/50 border border-border/50 rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
                 >
                   <option value="">Select game...</option>
