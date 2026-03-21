@@ -3,9 +3,7 @@ import { Search, Filter, Crosshair, Shield, Globe, Clock, ChevronDown } from "lu
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { GAMES, getRanksForGame } from "@/lib/gameData";
-
-const REGIONS = ["NA East", "NA West", "EU West", "EU East", "Asia", "OCE"];
+import { GAMES, getRanksForGame, getRegionsForGame } from "@/lib/gameData";
 
 interface ScrimListing {
   id: string;
