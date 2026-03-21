@@ -35,14 +35,17 @@ export default function FindScrims() {
   const [search, setSearch] = useState("");
   const [filterGame, setFilterGame] = useState("");
   const [filterRank, setFilterRank] = useState("");
+  const [filterRegion, setFilterRegion] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
   const availableRanks = filterGame ? getRanksForGame(filterGame) : [];
+  const availableRegions = filterGame ? getRegionsForGame(filterGame) : [];
 
   const filtered = mockListings.filter((l) => {
     if (search && !l.teamName.toLowerCase().includes(search.toLowerCase())) return false;
     if (filterGame && l.game !== filterGame) return false;
     if (filterRank && l.rank !== filterRank) return false;
+    if (filterRegion && l.region !== filterRegion) return false;
     return true;
   });
 
