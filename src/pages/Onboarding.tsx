@@ -129,7 +129,7 @@ export default function Onboarding() {
               <p className="text-sm text-muted-foreground">Click to cycle: <span className="text-foreground">Neutral</span> → <span className="text-success">Strong</span> → <span className="text-destructive">Weak</span></p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {!game && <p className="col-span-full text-sm text-muted-foreground text-center py-4">Select a game first to see available maps</p>}
-                {MAPS.map((map) => {
+                {getMapsForGame(game).map((map) => {
                   const status = mapPool[map];
                   return (
                     <button
