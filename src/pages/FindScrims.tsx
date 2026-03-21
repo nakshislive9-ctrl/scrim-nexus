@@ -3,9 +3,8 @@ import { Search, Filter, Crosshair, Shield, Globe, Clock, ChevronDown } from "lu
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { GAMES, getRanksForGame } from "@/lib/gameData";
 
-const GAMES = ["Valorant", "CS2", "Overwatch 2", "League of Legends", "Rocket League"];
-const RANKS = ["Iron", "Bronze", "Silver", "Gold", "Platinum", "Diamond", "Ascendant", "Immortal", "Radiant"];
 const REGIONS = ["NA East", "NA West", "EU West", "EU East", "Asia", "OCE"];
 
 interface ScrimListing {
