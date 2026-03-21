@@ -36,6 +36,7 @@ export function AppSidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
   const isActive = (path: string) => currentPath === path;
+  const { user, signOut } = useAuth();
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border/50">
