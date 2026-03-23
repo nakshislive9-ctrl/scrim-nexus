@@ -125,7 +125,7 @@ export default function TeamProfile() {
   };
 
   const ranks = getRanksForGame(team.game);
-
+  const roles = getRolesForGame(team.game);
   return (
     <PageTransition>
       <div className="max-w-5xl mx-auto space-y-6">
