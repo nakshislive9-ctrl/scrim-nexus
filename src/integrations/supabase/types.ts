@@ -44,6 +44,95 @@ export type Database = {
         }
         Relationships: []
       }
+      team_members: {
+        Row: {
+          created_at: string
+          id: string
+          ign: string
+          is_captain: boolean | null
+          level: string | null
+          member_rank: string | null
+          role: string | null
+          team_id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ign: string
+          is_captain?: boolean | null
+          level?: string | null
+          member_rank?: string | null
+          role?: string | null
+          team_id: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ign?: string
+          is_captain?: boolean | null
+          level?: string | null
+          member_rank?: string | null
+          role?: string | null
+          team_id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          captain_id: string
+          created_at: string
+          game: string
+          id: string
+          join_code: string
+          map_pool: Json | null
+          name: string
+          rank: string
+          region: string | null
+          reliability_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          captain_id: string
+          created_at?: string
+          game: string
+          id?: string
+          join_code?: string
+          map_pool?: Json | null
+          name: string
+          rank: string
+          region?: string | null
+          reliability_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          captain_id?: string
+          created_at?: string
+          game?: string
+          id?: string
+          join_code?: string
+          map_pool?: Json | null
+          name?: string
+          rank?: string
+          region?: string | null
+          reliability_score?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
