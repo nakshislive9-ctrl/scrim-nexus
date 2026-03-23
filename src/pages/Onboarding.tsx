@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ChevronLeft, Copy, Check, Gamepad2, Map, Link2, Users, Plus, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { GAMES, getRanksForGame, getMapsForGame, getRegionsForGame } from "@/lib/gameData";
+import { GAMES, getRanksForGame, getMapsForGame, getRegionsForGame, getRolesForGame } from "@/lib/gameData";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
