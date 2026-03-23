@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTeam, TeamMember } from "@/hooks/useTeam";
 import { supabase } from "@/integrations/supabase/client";
-import { getRanksForGame } from "@/lib/gameData";
+import { getRanksForGame, getRolesForGame } from "@/lib/gameData";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -125,7 +125,7 @@ export default function TeamProfile() {
   };
 
   const ranks = getRanksForGame(team.game);
-
+  const roles = getRolesForGame(team.game);
   return (
     <PageTransition>
       <div className="max-w-5xl mx-auto space-y-6">
@@ -208,15 +208,18 @@ export default function TeamProfile() {
                       <input type="text" value={m.ign} onChange={(e) => updateExisting(m.id, "ign", e.target.value)} placeholder="IGN"
                         className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
                       <div className="grid grid-cols-2 gap-2">
-                        <input type="text" value={m.role || ""} onChange={(e) => updateExisting(m.id, "role", e.target.value)} placeholder="Role"
-                          className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
+                        <select value={m.role || ""} onChange={(e) => updateExisting(m.id, "role", e.target.value)}
+                          className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
+                          <option value="">Role...</option>
+                          {roles.map((r) => <option key={r} value={r}>{r}</option>)}
+                        </select>
                         <select value={m.member_rank || ""} onChange={(e) => updateExisting(m.id, "member_rank", e.target.value)}
                           className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
                           <option value="">Rank...</option>
                           {ranks.map((r) => <option key={r} value={r}>{r}</option>)}
                         </select>
                       </div>
-                      <input type="text" value={m.level || ""} onChange={(e) => updateExisting(m.id, "level", e.target.value)} placeholder="Level"
+                      <input type="number" min="0" value={m.level || ""} onChange={(e) => updateExisting(m.id, "level", e.target.value)} placeholder="Level"
                         className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
                     </div>
                   ))}
@@ -233,15 +236,18 @@ export default function TeamProfile() {
                       <input type="text" value={m.ign} onChange={(e) => updateNew(idx, "ign", e.target.value)} placeholder="IGN"
                         className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
                       <div className="grid grid-cols-2 gap-2">
-                        <input type="text" value={m.role} onChange={(e) => updateNew(idx, "role", e.target.value)} placeholder="Role"
-                          className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
+                        <select value={m.role} onChange={(e) => updateNew(idx, "role", e.target.value)}
+                          className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
+                          <option value="">Role...</option>
+                          {roles.map((r) => <option key={r} value={r}>{r}</option>)}
+                        </select>
                         <select value={m.member_rank} onChange={(e) => updateNew(idx, "member_rank", e.target.value)}
                           className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
                           <option value="">Rank...</option>
                           {ranks.map((r) => <option key={r} value={r}>{r}</option>)}
                         </select>
                       </div>
-                      <input type="text" value={m.level} onChange={(e) => updateNew(idx, "level", e.target.value)} placeholder="Level"
+                      <input type="number" min="0" value={m.level} onChange={(e) => updateNew(idx, "level", e.target.value)} placeholder="Level"
                         className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
                     </div>
                   ))}

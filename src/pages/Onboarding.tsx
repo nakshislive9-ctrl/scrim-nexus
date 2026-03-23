@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ChevronLeft, Copy, Check, Gamepad2, Map, Link2, Users, Plus, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { GAMES, getRanksForGame, getMapsForGame, getRegionsForGame } from "@/lib/gameData";
+import { GAMES, getRanksForGame, getMapsForGame, getRegionsForGame, getRolesForGame } from "@/lib/gameData";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -235,15 +235,18 @@ export default function Onboarding() {
                     <input type="text" value={m.ign} onChange={(e) => updateMember(idx, "ign", e.target.value)} placeholder="In-Game Name (IGN)"
                       className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
                     <div className="grid grid-cols-2 gap-2">
-                      <input type="text" value={m.role} onChange={(e) => updateMember(idx, "role", e.target.value)} placeholder="Role (e.g. Duelist)"
-                        className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
+                      <select value={m.role} onChange={(e) => updateMember(idx, "role", e.target.value)}
+                        className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all">
+                        <option value="">Role...</option>
+                        {getRolesForGame(game).map((r) => <option key={r} value={r}>{r}</option>)}
+                      </select>
                       <select value={m.member_rank} onChange={(e) => updateMember(idx, "member_rank", e.target.value)}
                         className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
                         <option value="">Rank...</option>
                         {getRanksForGame(game).map((r) => <option key={r} value={r}>{r}</option>)}
                       </select>
                     </div>
-                    <input type="text" value={m.level} onChange={(e) => updateMember(idx, "level", e.target.value)} placeholder="Level (optional, e.g. 142)"
+                    <input type="number" min="0" value={m.level} onChange={(e) => updateMember(idx, "level", e.target.value)} placeholder="Level (optional)"
                       className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
                   </div>
                 ))}

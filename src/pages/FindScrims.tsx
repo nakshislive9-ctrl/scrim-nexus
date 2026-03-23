@@ -1,29 +1,20 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Search, Filter, Crosshair, Shield, Globe, Clock, ChevronDown } from "lucide-react";
+import { Search, Filter, Crosshair, Shield, Globe, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { GAMES, getRanksForGame, getRegionsForGame } from "@/lib/gameData";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
-interface ScrimListing {
+interface TeamListing {
   id: string;
-  teamName: string;
+  name: string;
   game: string;
   rank: string;
-  region: string;
-  reliability: number;
-  timeSlot: string;
-  mapPreferences: string[];
+  region: string | null;
+  reliability_score: number | null;
 }
-
-const mockListings: ScrimListing[] = [
-  { id: "1", teamName: "Team Phantom", game: "Valorant", rank: "Immortal", region: "NA East", reliability: 92, timeSlot: "8:00 PM EST", mapPreferences: ["Ascent", "Haven"] },
-  { id: "2", teamName: "Eclipse Gaming", game: "Valorant", rank: "Diamond", region: "EU West", reliability: 87, timeSlot: "9:30 PM CET", mapPreferences: ["Bind", "Split"] },
-  { id: "3", teamName: "Midnight Wolves", game: "CS2", rank: "Global Elite", region: "NA West", reliability: 95, timeSlot: "7:00 PM PST", mapPreferences: ["Mirage", "Inferno"] },
-  { id: "4", teamName: "Crimson Tigers", game: "Valorant", rank: "Platinum", region: "Asia", reliability: 78, timeSlot: "10:00 PM JST", mapPreferences: ["Lotus", "Fracture"] },
-  { id: "5", teamName: "Arctic Storm", game: "Overwatch 2", rank: "Master", region: "EU East", reliability: 91, timeSlot: "8:00 PM EET", mapPreferences: ["Havana", "Circuit Royal"] },
-  { id: "6", teamName: "Nova Esports", game: "Valorant", rank: "Radiant", region: "NA East", reliability: 98, timeSlot: "9:00 PM EST", mapPreferences: ["Ascent", "Icebox"] },
-];
 
 function getReliabilityColor(score: number) {
   if (score >= 90) return "text-success";
@@ -32,20 +23,38 @@ function getReliabilityColor(score: number) {
 }
 
 export default function FindScrims() {
+  const { user } = useAuth();
   const [search, setSearch] = useState("");
   const [filterGame, setFilterGame] = useState("");
   const [filterRank, setFilterRank] = useState("");
   const [filterRegion, setFilterRegion] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [teams, setTeams] = useState<TeamListing[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTeams = async () => {
+      setLoading(true);
+      const { data } = await supabase
+        .from("teams")
+        .select("id, name, game, rank, region, reliability_score")
+        .neq("captain_id", user?.id ?? "")
+        .order("created_at", { ascending: false });
+
+      setTeams(data ?? []);
+      setLoading(false);
+    };
+    fetchTeams();
+  }, [user]);
 
   const availableRanks = filterGame ? getRanksForGame(filterGame) : [];
   const availableRegions = filterGame ? getRegionsForGame(filterGame) : [];
 
-  const filtered = mockListings.filter((l) => {
-    if (search && !l.teamName.toLowerCase().includes(search.toLowerCase())) return false;
-    if (filterGame && l.game !== filterGame) return false;
-    if (filterRank && l.rank !== filterRank) return false;
-    if (filterRegion && l.region !== filterRegion) return false;
+  const filtered = teams.filter((t) => {
+    if (search && !t.name.toLowerCase().includes(search.toLowerCase())) return false;
+    if (filterGame && t.game !== filterGame) return false;
+    if (filterRank && t.rank !== filterRank) return false;
+    if (filterRegion && t.region !== filterRegion) return false;
     return true;
   });
 
@@ -114,45 +123,50 @@ export default function FindScrims() {
         </div>
 
         {/* Listings */}
-        <StaggerContainer className="space-y-3">
-          {filtered.map((listing) => (
-            <StaggerItem key={listing.id}>
-              <div className="glass-panel-hover p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <h3 className="font-semibold text-foreground">{listing.teamName}</h3>
-                    <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary">{listing.rank}</Badge>
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <StaggerContainer className="space-y-3">
+            {filtered.map((t) => (
+              <StaggerItem key={t.id}>
+                <div className="glass-panel-hover p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <h3 className="font-semibold text-foreground">{t.name}</h3>
+                      <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary">{t.rank}</Badge>
+                    </div>
+                    <div className="flex items-center gap-4 mt-2 flex-wrap">
+                      <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Crosshair className="h-3 w-3" /> {t.game}
+                      </span>
+                      {t.region && (
+                        <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <Globe className="h-3 w-3" /> {t.region}
+                        </span>
+                      )}
+                      <span className={`flex items-center gap-1.5 text-xs font-mono font-medium ${getReliabilityColor(t.reliability_score ?? 100)}`}>
+                        <Shield className="h-3 w-3" /> {t.reliability_score ?? 100}%
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-4 mt-2 flex-wrap">
-                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <Crosshair className="h-3 w-3" /> {listing.game}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <Globe className="h-3 w-3" /> {listing.region}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <Clock className="h-3 w-3" /> {listing.timeSlot}
-                    </span>
-                    <span className={`flex items-center gap-1.5 text-xs font-mono font-medium ${getReliabilityColor(listing.reliability)}`}>
-                      <Shield className="h-3 w-3" /> {listing.reliability}%
-                    </span>
-                  </div>
+                  <Button variant="neon" size="sm" className="shrink-0">
+                    <Crosshair className="h-3.5 w-3.5 mr-1.5" />
+                    Challenge
+                  </Button>
                 </div>
-                <Button variant="neon" size="sm" className="shrink-0">
-                  <Crosshair className="h-3.5 w-3.5 mr-1.5" />
-                  Challenge
-                </Button>
+              </StaggerItem>
+            ))}
+            {filtered.length === 0 && (
+              <div className="glass-panel p-12 text-center">
+                <Crosshair className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground">No teams found matching your filters</p>
+                <Button variant="ghost" size="sm" className="mt-3" onClick={() => { setSearch(""); setFilterGame(""); setFilterRank(""); setFilterRegion(""); }}>Reset Filters</Button>
               </div>
-            </StaggerItem>
-          ))}
-          {filtered.length === 0 && (
-            <div className="glass-panel p-12 text-center">
-              <Crosshair className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
-              <p className="text-sm text-muted-foreground">No scrims match your filters</p>
-              <Button variant="ghost" size="sm" className="mt-3" onClick={() => { setSearch(""); setFilterGame(""); setFilterRank(""); setFilterRegion(""); }}>Reset Filters</Button>
-            </div>
-          )}
-        </StaggerContainer>
+            )}
+          </StaggerContainer>
+        )}
       </div>
     </PageTransition>
   );
