@@ -235,8 +235,11 @@ export default function Onboarding() {
                     <input type="text" value={m.ign} onChange={(e) => updateMember(idx, "ign", e.target.value)} placeholder="In-Game Name (IGN)"
                       className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
                     <div className="grid grid-cols-2 gap-2">
-                      <input type="text" value={m.role} onChange={(e) => updateMember(idx, "role", e.target.value)} placeholder="Role (e.g. Duelist)"
-                        className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
+                      <select value={m.role} onChange={(e) => updateMember(idx, "role", e.target.value)}
+                        className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all">
+                        <option value="">Role...</option>
+                        {getRolesForGame(game).map((r) => <option key={r} value={r}>{r}</option>)}
+                      </select>
                       <select value={m.member_rank} onChange={(e) => updateMember(idx, "member_rank", e.target.value)}
                         className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
                         <option value="">Rank...</option>
