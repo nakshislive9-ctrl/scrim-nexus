@@ -246,7 +246,7 @@ export default function Onboarding() {
                         {getRanksForGame(game).map((r) => <option key={r} value={r}>{r}</option>)}
                       </select>
                     </div>
-                    <input type="text" value={m.level} onChange={(e) => updateMember(idx, "level", e.target.value)} placeholder="Level (optional, e.g. 142)"
+                    <input type="number" min="0" value={m.level} onChange={(e) => updateMember(idx, "level", e.target.value)} placeholder="Level (optional)"
                       className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
                   </div>
                 ))}

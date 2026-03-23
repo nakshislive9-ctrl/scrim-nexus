@@ -247,7 +247,7 @@ export default function TeamProfile() {
                           {ranks.map((r) => <option key={r} value={r}>{r}</option>)}
                         </select>
                       </div>
-                      <input type="text" value={m.level} onChange={(e) => updateNew(idx, "level", e.target.value)} placeholder="Level"
+                      <input type="number" min="0" value={m.level} onChange={(e) => updateNew(idx, "level", e.target.value)} placeholder="Level"
                         className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
                     </div>
                   ))}
