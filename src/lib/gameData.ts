@@ -24,6 +24,14 @@ export const GAME_REGIONS: Record<string, string[]> = {
   "Rocket League": ["US-East", "US-West", "Europe", "Oceania", "South America", "Asia SE-Mainland", "Asia SE-Maritime", "Middle East"],
 };
 
+export const GAME_ROLES: Record<string, string[]> = {
+  "Valorant": ["Duelist", "Initiator", "Controller", "Sentinel", "Flex", "IGL"],
+  "CS2": ["Entry Fragger", "AWPer", "Rifler", "Support", "Lurker", "IGL"],
+  "Overwatch 2": ["Tank", "DPS", "Support", "Flex", "IGL"],
+  "League of Legends": ["Top", "Jungle", "Mid", "ADC", "Support", "Fill"],
+  "Rocket League": ["Striker", "Midfielder", "Defender", "Rotator", "Flex"],
+};
+
 export function getRanksForGame(game: string): string[] {
   return GAME_RANKS[game] || [];
 }
@@ -34,5 +42,9 @@ export function getMapsForGame(game: string): string[] {
 
 export function getRegionsForGame(game: string): string[] {
   return GAME_REGIONS[game] || [];
+}
+
+export function getRolesForGame(game: string): string[] {
+  return GAME_ROLES[game] || [];
 }
 
