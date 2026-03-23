@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTeam, TeamMember } from "@/hooks/useTeam";
 import { supabase } from "@/integrations/supabase/client";
-import { getRanksForGame } from "@/lib/gameData";
+import { getRanksForGame, getRolesForGame } from "@/lib/gameData";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
