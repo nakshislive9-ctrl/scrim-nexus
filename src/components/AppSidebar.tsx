@@ -2,6 +2,7 @@ import {
   LayoutDashboard,
   Crosshair,
   Users,
+  UserPlus,
   Settings,
   Zap,
   LogOut,
