@@ -34,6 +34,7 @@ const App = () => (
             }>
               <Route path="/" element={<Dashboard />} />
               <Route path="/find-scrims" element={<FindScrims />} />
+              <Route path="/find-players" element={<FindPlayers />} />
               <Route path="/team-profile" element={<TeamProfile />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Route>

@@ -27,6 +27,7 @@ import {
 const navItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   { title: "Find Scrims", url: "/find-scrims", icon: Crosshair },
+  { title: "Find Players", url: "/find-players", icon: UserPlus },
   { title: "Team Profile", url: "/team-profile", icon: Users },
   { title: "Settings", url: "/settings", icon: Settings },
 ];

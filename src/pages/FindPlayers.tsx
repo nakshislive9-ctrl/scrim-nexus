@@ -72,8 +72,8 @@ export default function FindPlayers() {
           .select("id, name")
           .in("id", teamIds as string[]);
         const teamMap = new Map(teams?.map(t => [t.id, t.name]) ?? []);
-        data.forEach(d => {
-          if (d.team_id) d.team_name = teamMap.get(d.team_id) ?? undefined;
+      data.forEach(d => {
+          if (d.team_id) (d as any).team_name = teamMap.get(d.team_id) ?? undefined;
         });
       }
     }
