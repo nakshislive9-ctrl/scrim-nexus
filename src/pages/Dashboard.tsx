@@ -15,12 +15,7 @@ const reliabilityData = [
   { day: "Sun", score: 93 },
 ];
 
-const recentActivity = [
-  { id: 1, text: "Challenge accepted by Team Phantom", time: "2m ago", type: "challenge" },
-  { id: 2, text: "Player 'Vex' checked in", time: "15m ago", type: "roster" },
-  { id: 3, text: "Scrim vs Team Eclipse completed", time: "1h ago", type: "match" },
-  { id: 4, text: "Map pool updated: Dust II removed", time: "3h ago", type: "config" },
-];
+const recentActivity: { id: number; text: string; time: string; type: string }[] = [];
 
 export default function Dashboard() {
   const navigate = useNavigate();
