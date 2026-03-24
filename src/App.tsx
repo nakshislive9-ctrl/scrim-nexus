@@ -8,6 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import AppLayout from "@/components/AppLayout";
 import Dashboard from "@/pages/Dashboard";
 import FindScrims from "@/pages/FindScrims";
+import FindPlayers from "@/pages/FindPlayers";
 import TeamProfile from "@/pages/TeamProfile";
 import SettingsPage from "@/pages/SettingsPage";
 import Onboarding from "@/pages/Onboarding";
