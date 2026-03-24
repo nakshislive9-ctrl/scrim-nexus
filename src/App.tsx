@@ -13,6 +13,7 @@ import TeamProfile from "@/pages/TeamProfile";
 import SettingsPage from "@/pages/SettingsPage";
 import Onboarding from "@/pages/Onboarding";
 import Auth from "@/pages/Auth";
+import Challenges from "@/pages/Challenges";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/find-scrims" element={<FindScrims />} />
               <Route path="/find-players" element={<FindPlayers />} />
               <Route path="/team-profile" element={<TeamProfile />} />
+              <Route path="/challenges" element={<Challenges />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
