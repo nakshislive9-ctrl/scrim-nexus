@@ -13,6 +13,7 @@ import TeamProfile from "@/pages/TeamProfile";
 import SettingsPage from "@/pages/SettingsPage";
 import Onboarding from "@/pages/Onboarding";
 import Auth from "@/pages/Auth";
+import Challenges from "@/pages/Challenges";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
