@@ -28,6 +28,8 @@ function getReliabilityColor(score: number) {
 
 export default function FindScrims() {
   const { user } = useAuth();
+  const { team: myTeam } = useTeam();
+  const { sendChallenge, outgoing } = useScrimRequests();
   const [search, setSearch] = useState("");
   const [filterGame, setFilterGame] = useState("");
   const [filterRank, setFilterRank] = useState("");
@@ -35,13 +37,14 @@ export default function FindScrims() {
   const [showFilters, setShowFilters] = useState(false);
   const [teams, setTeams] = useState<TeamListing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [challengingId, setChallengingId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTeams = async () => {
       setLoading(true);
       const { data } = await supabase
         .from("teams")
-        .select("id, name, game, rank, region, reliability_score")
+        .select("id, name, game, rank, region, reliability_score, captain_id")
         .neq("captain_id", user?.id ?? "")
         .order("created_at", { ascending: false });
 
@@ -50,6 +53,23 @@ export default function FindScrims() {
     };
     fetchTeams();
   }, [user]);
+
+  const alreadyChallenged = new Set(outgoing.filter(r => r.status === "pending" || r.status === "accepted").map(r => r.challenged_team_id));
+
+  const handleChallenge = async (teamId: string, captainId: string) => {
+    if (!myTeam) {
+      toast.error("You need to create a team first");
+      return;
+    }
+    setChallengingId(teamId);
+    const { error } = await sendChallenge(teamId, captainId);
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success("Challenge sent! The opponent's captain will be notified.");
+    }
+    setChallengingId(null);
+  };
 
   const availableRanks = filterGame ? getRanksForGame(filterGame) : [];
   const availableRegions = filterGame ? getRegionsForGame(filterGame) : [];
