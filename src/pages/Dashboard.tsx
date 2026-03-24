@@ -1,8 +1,8 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Clock, TrendingUp, Activity, Swords, ChevronRight, Shield } from "lucide-react";
+import { Clock, TrendingUp, Activity, Swords } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 
 const reliabilityData = [
