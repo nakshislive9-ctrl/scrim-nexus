@@ -175,9 +175,15 @@ export default function FindScrims() {
                       </span>
                     </div>
                   </div>
-                  <Button variant="neon" size="sm" className="shrink-0">
+                  <Button
+                    variant="neon"
+                    size="sm"
+                    className="shrink-0"
+                    disabled={alreadyChallenged.has(t.id) || challengingId === t.id}
+                    onClick={() => handleChallenge(t.id, t.captain_id)}
+                  >
                     <Crosshair className="h-3.5 w-3.5 mr-1.5" />
-                    Challenge
+                    {alreadyChallenged.has(t.id) ? "Challenged" : challengingId === t.id ? "Sending..." : "Challenge"}
                   </Button>
                 </div>
               </StaggerItem>
