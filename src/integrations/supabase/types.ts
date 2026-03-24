@@ -14,6 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      player_listings: {
+        Row: {
+          created_at: string
+          description: string | null
+          game: string
+          id: string
+          ign: string
+          level: string | null
+          listing_type: string
+          rank: string
+          region: string | null
+          role: string | null
+          team_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          game: string
+          id?: string
+          ign: string
+          level?: string | null
+          listing_type: string
+          rank: string
+          region?: string | null
+          role?: string | null
+          team_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          game?: string
+          id?: string
+          ign?: string
+          level?: string | null
+          listing_type?: string
+          rank?: string
+          region?: string | null
+          role?: string | null
+          team_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_listings_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

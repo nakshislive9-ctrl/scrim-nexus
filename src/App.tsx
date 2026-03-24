@@ -8,6 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import AppLayout from "@/components/AppLayout";
 import Dashboard from "@/pages/Dashboard";
 import FindScrims from "@/pages/FindScrims";
+import FindPlayers from "@/pages/FindPlayers";
 import TeamProfile from "@/pages/TeamProfile";
 import SettingsPage from "@/pages/SettingsPage";
 import Onboarding from "@/pages/Onboarding";
@@ -33,6 +34,7 @@ const App = () => (
             }>
               <Route path="/" element={<Dashboard />} />
               <Route path="/find-scrims" element={<FindScrims />} />
+              <Route path="/find-players" element={<FindPlayers />} />
               <Route path="/team-profile" element={<TeamProfile />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
