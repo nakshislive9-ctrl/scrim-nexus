@@ -100,6 +100,121 @@ export type Database = {
         }
         Relationships: []
       }
+      scrim_requests: {
+        Row: {
+          challenged_captain_id: string
+          challenged_team_id: string
+          challenger_captain_id: string
+          challenger_team_id: string
+          created_at: string
+          id: string
+          message: string | null
+          proposed_by: string | null
+          proposed_time: string | null
+          status: string
+          time_status: string
+          updated_at: string
+        }
+        Insert: {
+          challenged_captain_id: string
+          challenged_team_id: string
+          challenger_captain_id: string
+          challenger_team_id: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          proposed_by?: string | null
+          proposed_time?: string | null
+          status?: string
+          time_status?: string
+          updated_at?: string
+        }
+        Update: {
+          challenged_captain_id?: string
+          challenged_team_id?: string
+          challenger_captain_id?: string
+          challenger_team_id?: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          proposed_by?: string | null
+          proposed_time?: string | null
+          status?: string
+          time_status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scrim_requests_challenged_team_id_fkey"
+            columns: ["challenged_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scrim_requests_challenger_team_id_fkey"
+            columns: ["challenger_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scrims: {
+        Row: {
+          away_team_id: string
+          created_at: string
+          home_team_id: string
+          id: string
+          request_id: string
+          scheduled_time: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          away_team_id: string
+          created_at?: string
+          home_team_id: string
+          id?: string
+          request_id: string
+          scheduled_time: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          away_team_id?: string
+          created_at?: string
+          home_team_id?: string
+          id?: string
+          request_id?: string
+          scheduled_time?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scrims_away_team_id_fkey"
+            columns: ["away_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scrims_home_team_id_fkey"
+            columns: ["home_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scrims_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "scrim_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       team_members: {
         Row: {
           created_at: string
