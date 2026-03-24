@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { GAMES, getRanksForGame, getRegionsForGame } from "@/lib/gameData";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useScrimRequests } from "@/hooks/useScrimRequests";
+import { useTeam } from "@/hooks/useTeam";
+import { toast } from "sonner";
 
 interface TeamListing {
   id: string;
@@ -14,6 +17,7 @@ interface TeamListing {
   rank: string;
   region: string | null;
   reliability_score: number | null;
+  captain_id: string;
 }
 
 function getReliabilityColor(score: number) {
