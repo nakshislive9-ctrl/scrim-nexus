@@ -19,23 +19,6 @@ const recentActivity: { id: number; text: string; time: string; type: string }[]
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [countdown, setCountdown] = useState({ hours: 2, minutes: 34, seconds: 12 });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCountdown((prev) => {
-        let { hours, minutes, seconds } = prev;
-        seconds--;
-        if (seconds < 0) { seconds = 59; minutes--; }
-        if (minutes < 0) { minutes = 59; hours--; }
-        if (hours < 0) return { hours: 0, minutes: 0, seconds: 0 };
-        return { hours, minutes, seconds };
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const pad = (n: number) => n.toString().padStart(2, "0");
 
   return (
     <PageTransition>
