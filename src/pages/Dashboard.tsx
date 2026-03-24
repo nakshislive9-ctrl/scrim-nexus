@@ -61,27 +61,12 @@ export default function Dashboard() {
                   <Swords className="h-4 w-4 text-primary" />
                   <span className="text-xs font-mono text-primary tracking-wider uppercase">Next Match</span>
                 </div>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div>
-                    <h2 className="text-lg font-bold">vs Team Phantom</h2>
-                    <p className="text-sm text-muted-foreground mt-1">Valorant · Ranked · Best of 3</p>
-                    <div className="flex items-center gap-2 mt-3">
-                      <Shield className="h-3.5 w-3.5 text-success" />
-                      <span className="text-xs text-success font-medium">92% Reliability</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="text-center">
-                      <div className="font-mono text-3xl font-bold neon-text tracking-tighter">
-                        {pad(countdown.hours)}:{pad(countdown.minutes)}:{pad(countdown.seconds)}
-                      </div>
-                      <p className="text-[10px] font-mono text-muted-foreground mt-1 tracking-wider uppercase">Until Match</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex gap-2 mt-5">
-                  <Button size="sm" variant="neon">Enter Lobby</Button>
-                  <Button size="sm" variant="ghost" className="text-muted-foreground">Reschedule</Button>
+                <div className="flex flex-col items-center justify-center py-6 text-center">
+                  <Swords className="h-8 w-8 text-muted-foreground/30 mb-3" />
+                  <p className="text-sm text-muted-foreground">No upcoming scrims scheduled</p>
+                  <Button size="sm" variant="neon" className="mt-4" onClick={() => navigate("/find-scrims")}>
+                    Find a Scrim
+                  </Button>
                 </div>
               </div>
             </div>
