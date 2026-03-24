@@ -1,6 +1,7 @@
 import {
   LayoutDashboard,
   Crosshair,
+  Swords,
   Users,
   UserPlus,
   Settings,
