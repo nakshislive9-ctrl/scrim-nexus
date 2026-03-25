@@ -34,11 +34,30 @@ export function useTeam() {
   const fetchTeam = async () => {
     if (!user) { setLoading(false); return; }
 
-    const { data: teamData } = await supabase
+    // First check if user is a captain
+    let { data: teamData } = await supabase
       .from("teams")
       .select("*")
       .eq("captain_id", user.id)
       .maybeSingle();
+
+    // If not a captain, find team via team_members
+    if (!teamData) {
+      const { data: memberRow } = await supabase
+        .from("team_members")
+        .select("team_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (memberRow) {
+        const { data: t } = await supabase
+          .from("teams")
+          .select("*")
+          .eq("id", memberRow.team_id)
+          .maybeSingle();
+        teamData = t;
+      }
+    }
 
     if (teamData) {
       setTeam({

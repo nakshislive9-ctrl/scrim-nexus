@@ -11,6 +11,7 @@ import FindScrims from "@/pages/FindScrims";
 import FindPlayers from "@/pages/FindPlayers";
 import TeamProfile from "@/pages/TeamProfile";
 import SettingsPage from "@/pages/SettingsPage";
+import Profile from "@/pages/Profile";
 import Onboarding from "@/pages/Onboarding";
 import Auth from "@/pages/Auth";
 import Challenges from "@/pages/Challenges";
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/find-players" element={<FindPlayers />} />
               <Route path="/team-profile" element={<TeamProfile />} />
               <Route path="/challenges" element={<Challenges />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
