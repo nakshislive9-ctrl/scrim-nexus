@@ -1,8 +1,13 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Clock, TrendingUp, Activity, Swords } from "lucide-react";
+import { Clock, TrendingUp, Activity, Swords, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useTeam } from "@/hooks/useTeam";
+import { format } from "date-fns";
 
 const reliabilityData = [
   { day: "Mon", score: 82 },
@@ -14,10 +19,81 @@ const reliabilityData = [
   { day: "Sun", score: 93 },
 ];
 
-const recentActivity: { id: number; text: string; time: string; type: string }[] = [];
+interface UpcomingScrim {
+  id: string;
+  scheduled_time: string;
+  status: string;
+  opponent_name: string;
+  opponent_rank: string;
+  isHome: boolean;
+}
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { team } = useTeam();
+  const [upcomingScrims, setUpcomingScrims] = useState<UpcomingScrim[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!team) { setLoading(false); return; }
+
+    const fetchScrims = async () => {
+      const { data } = await supabase
+        .from("scrims")
+        .select("*")
+        .or(`home_team_id.eq.${team.id},away_team_id.eq.${team.id}`)
+        .in("status", ["scheduled"])
+        .order("scheduled_time", { ascending: true });
+
+      if (!data || data.length === 0) {
+        setUpcomingScrims([]);
+        setLoading(false);
+        return;
+      }
+
+      const opponentIds = data.map((s) =>
+        s.home_team_id === team.id ? s.away_team_id : s.home_team_id
+      );
+
+      const { data: teamsData } = await supabase
+        .from("teams")
+        .select("id, name, rank")
+        .in("id", opponentIds);
+
+      const teamsMap = new Map(teamsData?.map((t) => [t.id, t]) ?? []);
+
+      setUpcomingScrims(
+        data.map((s) => {
+          const isHome = s.home_team_id === team.id;
+          const opId = isHome ? s.away_team_id : s.home_team_id;
+          const op = teamsMap.get(opId);
+          return {
+            id: s.id,
+            scheduled_time: s.scheduled_time,
+            status: s.status,
+            opponent_name: op?.name ?? "Unknown",
+            opponent_rank: op?.rank ?? "",
+            isHome,
+          };
+        })
+      );
+      setLoading(false);
+    };
+
+    fetchScrims();
+
+    const channel = supabase
+      .channel("dashboard_scrims")
+      .on("postgres_changes", { event: "*", schema: "public", table: "scrims" }, () => {
+        fetchScrims();
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [team]);
+
+  const nextScrim = upcomingScrims[0] ?? null;
 
   return (
     <PageTransition>
@@ -43,13 +119,36 @@ export default function Dashboard() {
                   <Swords className="h-4 w-4 text-primary" />
                   <span className="text-xs font-mono text-primary tracking-wider uppercase">Next Match</span>
                 </div>
-                <div className="flex flex-col items-center justify-center py-6 text-center">
-                  <Swords className="h-8 w-8 text-muted-foreground/30 mb-3" />
-                  <p className="text-sm text-muted-foreground">No upcoming scrims scheduled</p>
-                  <Button size="sm" variant="neon" className="mt-4" onClick={() => navigate("/find-scrims")}>
-                    Find a Scrim
-                  </Button>
-                </div>
+                {nextScrim ? (
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
+                    <div className="flex items-center gap-4">
+                      <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <Swords className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-lg font-bold">vs {nextScrim.opponent_name}</p>
+                        <p className="text-xs text-muted-foreground font-mono">{nextScrim.opponent_rank}</p>
+                      </div>
+                    </div>
+                    <div className="text-center sm:text-right">
+                      <div className="flex items-center gap-2 text-primary">
+                        <Calendar className="h-4 w-4" />
+                        <span className="text-sm font-mono">{format(new Date(nextScrim.scheduled_time), "MMM d, yyyy")}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground font-mono mt-1">
+                        {format(new Date(nextScrim.scheduled_time), "h:mm a")}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-6 text-center">
+                    <Swords className="h-8 w-8 text-muted-foreground/30 mb-3" />
+                    <p className="text-sm text-muted-foreground">No upcoming scrims scheduled</p>
+                    <Button size="sm" variant="neon" className="mt-4" onClick={() => navigate("/find-scrims")}>
+                      Find a Scrim
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </StaggerItem>
@@ -62,7 +161,7 @@ export default function Dashboard() {
                 <span className="text-xs font-mono text-primary tracking-wider uppercase">Reliability</span>
               </div>
               <div className="flex-1 flex flex-col items-center justify-center">
-                <ReliabilityRing score={93} size={100} />
+                <ReliabilityRing score={team?.reliability_score ?? 93} size={100} />
                 <p className="text-xs text-muted-foreground mt-3">+5% this week</p>
               </div>
             </div>
@@ -103,25 +202,31 @@ export default function Dashboard() {
             </div>
           </StaggerItem>
 
-          {/* Recent Activity */}
+          {/* Upcoming Scrims List */}
           <StaggerItem>
             <div className="glass-panel p-6 h-full">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-primary" />
-                  <span className="text-xs font-mono text-primary tracking-wider uppercase">Activity</span>
+                  <span className="text-xs font-mono text-primary tracking-wider uppercase">Upcoming</span>
                 </div>
               </div>
               <div className="space-y-3">
-                {recentActivity.map((item) => (
-                  <div key={item.id} className="flex items-start gap-3 group">
-                    <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary/60 group-hover:bg-primary transition-colors shrink-0" />
-                    <div className="min-w-0">
-                      <p className="text-sm text-foreground/80 leading-snug">{item.text}</p>
-                      <p className="text-[10px] font-mono text-muted-foreground mt-0.5">{item.time}</p>
+                {upcomingScrims.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">No scrims scheduled yet</p>
+                ) : (
+                  upcomingScrims.slice(0, 5).map((scrim) => (
+                    <div key={scrim.id} className="flex items-start gap-3 group">
+                      <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary/60 group-hover:bg-primary transition-colors shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-sm text-foreground/80 leading-snug">vs {scrim.opponent_name}</p>
+                        <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
+                          {format(new Date(scrim.scheduled_time), "MMM d · h:mm a")}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </StaggerItem>
