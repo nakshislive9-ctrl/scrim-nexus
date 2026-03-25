@@ -1,5 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Clock, TrendingUp, Activity, Swords, Calendar } from "lucide-react";
+import { Clock, TrendingUp, Activity, Swords, Calendar, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
