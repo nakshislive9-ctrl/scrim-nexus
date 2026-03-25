@@ -34,6 +34,7 @@ export default function Dashboard() {
   const { team } = useTeam();
   const [upcomingScrims, setUpcomingScrims] = useState<UpcomingScrim[]>([]);
   const [loading, setLoading] = useState(true);
+  const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!team) { setLoading(false); return; }
