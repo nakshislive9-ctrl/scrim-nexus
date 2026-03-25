@@ -1,5 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Clock, TrendingUp, Activity, Swords, Calendar } from "lucide-react";
+import { Clock, TrendingUp, Activity, Swords, Calendar, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
@@ -34,6 +34,7 @@ export default function Dashboard() {
   const { team } = useTeam();
   const [upcomingScrims, setUpcomingScrims] = useState<UpcomingScrim[]>([]);
   const [loading, setLoading] = useState(true);
+  const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!team) { setLoading(false); return; }
@@ -93,7 +94,13 @@ export default function Dashboard() {
     return () => { supabase.removeChannel(channel); };
   }, [team]);
 
-  const nextScrim = upcomingScrims[0] ?? null;
+  const visibleScrims = upcomingScrims.filter((s) => !dismissedIds.has(s.id));
+  const nextScrim = visibleScrims[0] ?? null;
+  const isExpired = nextScrim ? new Date(nextScrim.scheduled_time) < new Date() : false;
+
+  const handleDismiss = (id: string) => {
+    setDismissedIds((prev) => new Set(prev).add(id));
+  };
 
   return (
     <PageTransition>
@@ -116,30 +123,46 @@ export default function Dashboard() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
               <div className="relative">
                 <div className="flex items-center gap-2 mb-4">
-                  <Swords className="h-4 w-4 text-primary" />
-                  <span className="text-xs font-mono text-primary tracking-wider uppercase">Next Match</span>
+                  <Swords className={`h-4 w-4 ${isExpired ? "text-destructive" : "text-primary"}`} />
+                  <span className={`text-xs font-mono tracking-wider uppercase ${isExpired ? "text-destructive" : "text-primary"}`}>
+                    {isExpired ? "Match Expired" : "Next Match"}
+                  </span>
                 </div>
                 {nextScrim ? (
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
-                    <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <Swords className="h-6 w-6 text-primary" />
+                  <>
+                    {isExpired && (
+                      <button
+                        onClick={() => handleDismiss(nextScrim.id)}
+                        className="absolute top-4 right-4 p-1.5 rounded-md hover:bg-destructive/10 text-destructive transition-colors"
+                        aria-label="Dismiss expired match"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    )}
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
+                      <div className="flex items-center gap-4">
+                        <div className={`h-12 w-12 rounded-lg flex items-center justify-center ${isExpired ? "bg-destructive/10" : "bg-primary/10"}`}>
+                          <Swords className={`h-6 w-6 ${isExpired ? "text-destructive" : "text-primary"}`} />
+                        </div>
+                        <div>
+                          <p className={`text-lg font-bold ${isExpired ? "text-destructive" : ""}`}>vs {nextScrim.opponent_name}</p>
+                          <p className={`text-xs font-mono mt-0.5 ${isExpired ? "text-destructive/60" : "text-muted-foreground"}`}>
+                            {nextScrim.opponent_rank}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-lg font-bold">vs {nextScrim.opponent_name}</p>
-                        <p className="text-xs text-muted-foreground font-mono">{nextScrim.opponent_rank}</p>
+                      <div className="text-center sm:text-right">
+                        <div className={`flex items-center gap-2 ${isExpired ? "text-destructive" : "text-primary"}`}>
+                          <Calendar className="h-4 w-4" />
+                          <span className="text-sm font-mono">{format(new Date(nextScrim.scheduled_time), "MMM d, yyyy")}</span>
+                        </div>
+                        <p className={`text-xs font-mono mt-1 ${isExpired ? "text-destructive/60" : "text-muted-foreground"}`}>
+                          {format(new Date(nextScrim.scheduled_time), "h:mm a")}
+                          {isExpired && " · Expired"}
+                        </p>
                       </div>
                     </div>
-                    <div className="text-center sm:text-right">
-                      <div className="flex items-center gap-2 text-primary">
-                        <Calendar className="h-4 w-4" />
-                        <span className="text-sm font-mono">{format(new Date(nextScrim.scheduled_time), "MMM d, yyyy")}</span>
-                      </div>
-                      <p className="text-xs text-muted-foreground font-mono mt-1">
-                        {format(new Date(nextScrim.scheduled_time), "h:mm a")}
-                      </p>
-                    </div>
-                  </div>
+                  </>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-6 text-center">
                     <Swords className="h-8 w-8 text-muted-foreground/30 mb-3" />
