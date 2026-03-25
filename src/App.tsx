@@ -39,6 +39,7 @@ const App = () => (
               <Route path="/find-players" element={<FindPlayers />} />
               <Route path="/team-profile" element={<TeamProfile />} />
               <Route path="/challenges" element={<Challenges />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />

@@ -32,6 +32,7 @@ const navItems = [
   { title: "Challenges", url: "/challenges", icon: Swords },
   { title: "Find Players", url: "/find-players", icon: UserPlus },
   { title: "Team Profile", url: "/team-profile", icon: Users },
+  { title: "My Profile", url: "/profile", icon: UserCircle },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
