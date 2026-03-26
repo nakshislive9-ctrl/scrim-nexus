@@ -213,22 +213,44 @@ export default function Profile() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Game (read-only) */}
+                  {/* Game */}
                   <div>
                     <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">Game</label>
-                    <p className="text-sm font-medium mt-1">{team.game}</p>
+                    {editing && isCaptain ? (
+                      <Select value={game} onValueChange={(v) => { setGame(v); setRank(""); setRole(""); setRegion(""); }}>
+                        <SelectTrigger className="mt-1 h-9"><SelectValue placeholder="Select game" /></SelectTrigger>
+                        <SelectContent>
+                          {GAMES.map((g) => <SelectItem key={g} value={g}>{g}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <p className="text-sm font-medium mt-1">{team.game}</p>
+                    )}
                   </div>
 
-                  {/* Team (read-only) */}
+                  {/* Team Name */}
                   <div>
                     <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">Team</label>
-                    <p className="text-sm font-medium mt-1">{team.name}</p>
+                    {editing && isCaptain ? (
+                      <Input value={teamName} onChange={(e) => setTeamName(e.target.value)} className="mt-1 h-9" maxLength={30} />
+                    ) : (
+                      <p className="text-sm font-medium mt-1">{team.name}</p>
+                    )}
                   </div>
 
-                  {/* Region (read-only) */}
+                  {/* Region */}
                   <div>
                     <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">Region</label>
-                    <p className="text-sm font-medium mt-1">{team.region || "—"}</p>
+                    {editing && isCaptain ? (
+                      <Select value={region} onValueChange={setRegion}>
+                        <SelectTrigger className="mt-1 h-9"><SelectValue placeholder="Select region" /></SelectTrigger>
+                        <SelectContent>
+                          {regions.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <p className="text-sm font-medium mt-1">{team.region || "—"}</p>
+                    )}
                   </div>
 
                   {/* IGN */}
