@@ -38,6 +38,9 @@ export default function Profile() {
   const [role, setRole] = useState("");
   const [rank, setRank] = useState("");
   const [level, setLevel] = useState("");
+  const [teamName, setTeamName] = useState("");
+  const [game, setGame] = useState("");
+  const [region, setRegion] = useState("");
 
   useEffect(() => {
     if (!user) return;
