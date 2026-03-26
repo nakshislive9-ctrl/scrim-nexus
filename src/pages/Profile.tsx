@@ -2,7 +2,7 @@ import { PageTransition, StaggerContainer, StaggerItem } from "@/components/Page
 import { useAuth } from "@/contexts/AuthContext";
 import { useTeam } from "@/hooks/useTeam";
 import { supabase } from "@/integrations/supabase/client";
-import { getRolesForGame, getRanksForGame, getRegionsForGame } from "@/lib/gameData";
+import { GAMES, getRolesForGame, getRanksForGame, getRegionsForGame } from "@/lib/gameData";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { User, Shield, Gamepad2, MapPin, Save, Pencil, X, Check } from "lucide-react";
