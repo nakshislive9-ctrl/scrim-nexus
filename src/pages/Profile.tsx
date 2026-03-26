@@ -69,7 +69,12 @@ export default function Profile() {
       setRank(myMember.member_rank ?? "");
       setLevel(myMember.level ?? "");
     }
-  }, [profile, myMember]);
+    if (team) {
+      setTeamName(team.name);
+      setGame(team.game);
+      setRegion(team.region ?? "");
+    }
+  }, [profile, myMember, team]);
 
   const game = team?.game ?? "";
   const roles = getRolesForGame(game);
