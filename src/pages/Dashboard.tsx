@@ -98,8 +98,10 @@ export default function Dashboard() {
   const nextScrim = visibleScrims[0] ?? null;
   const isExpired = nextScrim ? new Date(nextScrim.scheduled_time) < new Date() : false;
 
-  const handleDismiss = (id: string) => {
+  const handleDismiss = async (id: string) => {
     setDismissedIds((prev) => new Set(prev).add(id));
+    // Permanently mark as completed in the database
+    await supabase.from("scrims").update({ status: "completed" }).eq("id", id);
   };
 
   return (

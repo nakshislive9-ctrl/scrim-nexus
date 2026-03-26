@@ -2,7 +2,7 @@ import { PageTransition, StaggerContainer, StaggerItem } from "@/components/Page
 import { useAuth } from "@/contexts/AuthContext";
 import { useTeam } from "@/hooks/useTeam";
 import { supabase } from "@/integrations/supabase/client";
-import { getRolesForGame, getRanksForGame, getRegionsForGame } from "@/lib/gameData";
+import { GAMES, getRolesForGame, getRanksForGame, getRegionsForGame } from "@/lib/gameData";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { User, Shield, Gamepad2, MapPin, Save, Pencil, X, Check } from "lucide-react";
@@ -38,6 +38,9 @@ export default function Profile() {
   const [role, setRole] = useState("");
   const [rank, setRank] = useState("");
   const [level, setLevel] = useState("");
+  const [teamName, setTeamName] = useState("");
+  const [game, setGame] = useState("");
+  const [region, setRegion] = useState("");
 
   useEffect(() => {
     if (!user) return;
@@ -66,26 +69,39 @@ export default function Profile() {
       setRank(myMember.member_rank ?? "");
       setLevel(myMember.level ?? "");
     }
-  }, [profile, myMember]);
+    if (team) {
+      setTeamName(team.name);
+      setGame(team.game);
+      setRegion(team.region ?? "");
+    }
+  }, [profile, myMember, team]);
 
-  const game = team?.game ?? "";
-  const roles = getRolesForGame(game);
-  const ranks = getRanksForGame(game);
+  const editGame = game || team?.game || "";
+  const roles = getRolesForGame(editGame);
+  const ranks = getRanksForGame(editGame);
+  const regions = getRegionsForGame(editGame);
+  const isCaptain = team?.captain_id === user?.id;
 
   const handleSave = async () => {
     if (!user) return;
     setSaving(true);
 
     try {
-      // Update display name in profiles
       const { error: profileError } = await supabase
         .from("profiles")
         .update({ display_name: displayName.trim() })
         .eq("user_id", user.id);
-
       if (profileError) throw profileError;
 
-      // Update team member details (syncs to team profile)
+      // Update team details if captain
+      if (team && isCaptain) {
+        const { error: teamError } = await supabase
+          .from("teams")
+          .update({ name: teamName.trim(), game, region: region || null })
+          .eq("id", team.id);
+        if (teamError) throw teamError;
+      }
+
       if (myMember) {
         const { error: memberError } = await supabase
           .from("team_members")
@@ -96,7 +112,6 @@ export default function Profile() {
             level: level.trim() || null,
           })
           .eq("id", myMember.id);
-
         if (memberError) throw memberError;
       }
 
@@ -121,6 +136,11 @@ export default function Profile() {
       setRole(myMember.role ?? "");
       setRank(myMember.member_rank ?? "");
       setLevel(myMember.level ?? "");
+    }
+    if (team) {
+      setTeamName(team.name);
+      setGame(team.game);
+      setRegion(team.region ?? "");
     }
     setEditing(false);
   };
@@ -193,22 +213,44 @@ export default function Profile() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Game (read-only) */}
+                  {/* Game */}
                   <div>
                     <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">Game</label>
-                    <p className="text-sm font-medium mt-1">{team.game}</p>
+                    {editing && isCaptain ? (
+                      <Select value={game} onValueChange={(v) => { setGame(v); setRank(""); setRole(""); setRegion(""); }}>
+                        <SelectTrigger className="mt-1 h-9"><SelectValue placeholder="Select game" /></SelectTrigger>
+                        <SelectContent>
+                          {GAMES.map((g) => <SelectItem key={g} value={g}>{g}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <p className="text-sm font-medium mt-1">{team.game}</p>
+                    )}
                   </div>
 
-                  {/* Team (read-only) */}
+                  {/* Team Name */}
                   <div>
                     <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">Team</label>
-                    <p className="text-sm font-medium mt-1">{team.name}</p>
+                    {editing && isCaptain ? (
+                      <Input value={teamName} onChange={(e) => setTeamName(e.target.value)} className="mt-1 h-9" maxLength={30} />
+                    ) : (
+                      <p className="text-sm font-medium mt-1">{team.name}</p>
+                    )}
                   </div>
 
-                  {/* Region (read-only) */}
+                  {/* Region */}
                   <div>
                     <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">Region</label>
-                    <p className="text-sm font-medium mt-1">{team.region || "—"}</p>
+                    {editing && isCaptain ? (
+                      <Select value={region} onValueChange={setRegion}>
+                        <SelectTrigger className="mt-1 h-9"><SelectValue placeholder="Select region" /></SelectTrigger>
+                        <SelectContent>
+                          {regions.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <p className="text-sm font-medium mt-1">{team.region || "—"}</p>
+                    )}
                   </div>
 
                   {/* IGN */}
