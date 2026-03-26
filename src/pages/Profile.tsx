@@ -76,9 +76,11 @@ export default function Profile() {
     }
   }, [profile, myMember, team]);
 
-  const game = team?.game ?? "";
-  const roles = getRolesForGame(game);
-  const ranks = getRanksForGame(game);
+  const editGame = game || team?.game || "";
+  const roles = getRolesForGame(editGame);
+  const ranks = getRanksForGame(editGame);
+  const regions = getRegionsForGame(editGame);
+  const isCaptain = team?.captain_id === user?.id;
 
   const handleSave = async () => {
     if (!user) return;
