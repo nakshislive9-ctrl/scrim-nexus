@@ -87,15 +87,21 @@ export default function Profile() {
     setSaving(true);
 
     try {
-      // Update display name in profiles
       const { error: profileError } = await supabase
         .from("profiles")
         .update({ display_name: displayName.trim() })
         .eq("user_id", user.id);
-
       if (profileError) throw profileError;
 
-      // Update team member details (syncs to team profile)
+      // Update team details if captain
+      if (team && isCaptain) {
+        const { error: teamError } = await supabase
+          .from("teams")
+          .update({ name: teamName.trim(), game, region: region || null })
+          .eq("id", team.id);
+        if (teamError) throw teamError;
+      }
+
       if (myMember) {
         const { error: memberError } = await supabase
           .from("team_members")
@@ -106,7 +112,6 @@ export default function Profile() {
             level: level.trim() || null,
           })
           .eq("id", myMember.id);
-
         if (memberError) throw memberError;
       }
 
