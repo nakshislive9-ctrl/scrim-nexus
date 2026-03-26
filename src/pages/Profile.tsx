@@ -334,6 +334,11 @@ export default function Profile() {
             </StaggerItem>
           )}
 
+          {/* Games I Play */}
+          <StaggerItem>
+            <MyGamesCard />
+          </StaggerItem>
+
           {!team && (
             <StaggerItem>
               <div className="glass-panel p-8 text-center">
