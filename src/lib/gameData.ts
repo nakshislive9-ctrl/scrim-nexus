@@ -17,11 +17,11 @@ export const MAPS: Record<string, string[]> = {
 };
 
 export const GAME_REGIONS: Record<string, string[]> = {
-  "Valorant": ["NA East", "NA West", "EU West", "EU East", "LATAM", "Brazil", "Korea", "Japan", "SEA", "OCE"],
-  "CS2": ["NA East", "NA West", "EU West", "EU North", "EU East", "CIS", "South America", "Asia", "OCE"],
-  "Overwatch 2": ["Americas", "Europe", "Asia", "OCE"],
-  "League of Legends": ["NA", "EUW", "EUNE", "KR", "JP", "BR", "LAN", "LAS", "OCE", "SEA"],
-  "Rocket League": ["US-East", "US-West", "Europe", "Oceania", "South America", "Asia SE-Mainland", "Asia SE-Maritime", "Middle East"],
+  "Valorant": ["NA East", "NA West", "EU West", "EU East", "LATAM", "Brazil", "Korea", "Japan", "SEA", "OCE", "Mumbai"],
+  "CS2": ["NA East", "NA West", "EU West", "EU North", "EU East", "CIS", "South America", "Asia", "OCE", "India"],
+  "Overwatch 2": ["Americas", "Europe", "Asia", "OCE", "India"],
+  "League of Legends": ["NA", "EUW", "EUNE", "KR", "JP", "BR", "LAN", "LAS", "OCE", "SEA", "India"],
+  "Rocket League": ["US-East", "US-West", "Europe", "Oceania", "South America", "Asia SE-Mainland", "Asia SE-Maritime", "Middle East", "India"],
 };
 
 export const GAME_ROLES: Record<string, string[]> = {
