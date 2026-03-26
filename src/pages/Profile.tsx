@@ -6,6 +6,7 @@ import { GAMES, getRolesForGame, getRanksForGame, getRegionsForGame } from "@/li
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { User, Shield, Gamepad2, MapPin, Save, Pencil, X, Check } from "lucide-react";
+import MyGamesCard from "@/components/profile/MyGamesCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -332,6 +333,11 @@ export default function Profile() {
               </div>
             </StaggerItem>
           )}
+
+          {/* Games I Play */}
+          <StaggerItem>
+            <MyGamesCard />
+          </StaggerItem>
 
           {!team && (
             <StaggerItem>
