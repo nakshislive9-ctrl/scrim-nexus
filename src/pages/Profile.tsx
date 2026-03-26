@@ -137,6 +137,11 @@ export default function Profile() {
       setRank(myMember.member_rank ?? "");
       setLevel(myMember.level ?? "");
     }
+    if (team) {
+      setTeamName(team.name);
+      setGame(team.game);
+      setRegion(team.region ?? "");
+    }
     setEditing(false);
   };
 
