@@ -17,6 +17,7 @@ export default function TeamProfile() {
   const [newMembers, setNewMembers] = useState<{ ign: string; role: string; member_rank: string; level: string }[]>([]);
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
+  const [copied, setCopied] = useState(false);
   const navigate = useNavigate();
 
   if (loading) {
