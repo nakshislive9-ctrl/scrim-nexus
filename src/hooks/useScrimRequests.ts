@@ -157,6 +157,18 @@ export function useScrimRequests() {
       scheduled_time: request.proposed_time,
     });
 
+    // Notify both captains about scheduled match
+    const otherCaptain = user?.id === request.challenger_captain_id
+      ? request.challenged_captain_id
+      : request.challenger_captain_id;
+    await supabase.from("notifications").insert({
+      user_id: otherCaptain,
+      type: "match",
+      title: "Match scheduled!",
+      message: `Your scrim has been confirmed. Check the dashboard for details.`,
+      link: "/",
+    });
+
     fetchRequests();
   };
 
