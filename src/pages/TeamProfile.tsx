@@ -129,7 +129,6 @@ export default function TeamProfile() {
     }
   };
 
-  const [copied, setCopied] = useState(false);
 
   const inviteLink = `${window.location.origin}/auth?join=${team.join_code}`;
   const copyInviteLink = () => {
