@@ -57,6 +57,83 @@
     --warning-foreground: 38 92% 95%;
     --gold: 45 93% 58%;
   }
+
+  .light-mode {
+    --background: 0 0% 98%;
+    --foreground: 220 20% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 14%;
+
+    --primary: 185 80% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 92%;
+    --secondary-foreground: 220 20% 25%;
+
+    --muted: 220 14% 94%;
+    --muted-foreground: 215 12% 45%;
+
+    --accent: 185 60% 34%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 87%;
+    --input: 220 13% 87%;
+    --ring: 185 80% 38%;
+
+    --sidebar-background: 0 0% 97%;
+    --sidebar-foreground: 215 12% 40%;
+    --sidebar-primary: 185 80% 38%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 94%;
+    --sidebar-accent-foreground: 220 20% 14%;
+    --sidebar-border: 220 13% 90%;
+    --sidebar-ring: 185 80% 38%;
+
+    --neon: 185 80% 38%;
+    --neon-glow: 185 70% 45%;
+    --neon-dim: 185 40% 55%;
+    --surface-glass: 0 0% 100%;
+    --surface-elevated: 220 14% 96%;
+    --success: 142 72% 35%;
+    --success-foreground: 142 80% 95%;
+    --warning: 38 92% 45%;
+    --warning-foreground: 38 92% 12%;
+    --gold: 45 93% 48%;
+  }
+
+  .light-mode .glass-panel {
+    box-shadow:
+      0 0 0 1px hsl(var(--border) / 0.5),
+      0 2px 12px -2px hsl(220 25% 0% / 0.08);
+  }
+
+  .light-mode .glass-panel-hover:hover {
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.3),
+      0 4px 20px -4px hsl(220 25% 0% / 0.12);
+  }
+
+  .light-mode .neon-text {
+    color: hsl(var(--primary));
+    text-shadow: none;
+  }
+
+  .light-mode .neon-glow {
+    box-shadow: 0 2px 8px -2px hsl(var(--primary) / 0.3);
+  }
+
+  .light-mode .grid-bg {
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.4) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.4) 1px, transparent 1px);
+  }
 }
 
 @layer base {

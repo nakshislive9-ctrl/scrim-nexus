@@ -335,6 +335,13 @@ export default function Profile() {
             </StaggerItem>
           )}
 
+          {/* Match History */}
+          {team && (
+            <StaggerItem>
+              <MatchHistory />
+            </StaggerItem>
+          )}
+
           {/* Games I Play */}
           <StaggerItem>
             <MyGamesCard />
