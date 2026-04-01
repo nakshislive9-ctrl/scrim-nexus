@@ -289,6 +289,11 @@ export default function TeamProfile() {
                     {map} {status && `· ${status}`}
                   </Badge>
                 ))}
+                {Object.keys(team.map_pool).length === 0 && <p className="text-sm text-muted-foreground">No maps configured</p>}
+              </div>
+            </div>
+          </StaggerItem>
+
           {/* Invite Link */}
           <StaggerItem className="lg:col-span-3">
             <div className="glass-panel p-6">
