@@ -1,5 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Plus, Trash2 } from "lucide-react";
+import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Plus, Trash2, Link, Copy, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTeam, TeamMember } from "@/hooks/useTeam";
@@ -8,6 +8,7 @@ import { getRanksForGame, getRolesForGame } from "@/lib/gameData";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { MatchHistory } from "@/components/MatchHistory";
 
 export default function TeamProfile() {
   const { team, members, loading, refetch } = useTeam();
