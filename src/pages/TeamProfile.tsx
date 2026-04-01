@@ -1,5 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Plus, Trash2 } from "lucide-react";
+import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Plus, Trash2, Link, Copy, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTeam, TeamMember } from "@/hooks/useTeam";
@@ -8,6 +8,7 @@ import { getRanksForGame, getRolesForGame } from "@/lib/gameData";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { MatchHistory } from "@/components/MatchHistory";
 
 export default function TeamProfile() {
   const { team, members, loading, refetch } = useTeam();
@@ -16,6 +17,7 @@ export default function TeamProfile() {
   const [newMembers, setNewMembers] = useState<{ ign: string; role: string; member_rank: string; level: string }[]>([]);
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
+  const [copied, setCopied] = useState(false);
   const navigate = useNavigate();
 
   if (loading) {
@@ -32,8 +34,11 @@ export default function TeamProfile() {
     return (
       <PageTransition>
         <div className="max-w-5xl mx-auto text-center py-20 space-y-4">
+          <div className="mx-auto h-16 w-16 rounded-2xl bg-muted/50 flex items-center justify-center mb-2">
+            <Users className="h-8 w-8 text-muted-foreground/40" />
+          </div>
           <h1 className="text-2xl font-bold">No Team Yet</h1>
-          <p className="text-muted-foreground">Create your team to get started.</p>
+          <p className="text-muted-foreground max-w-sm mx-auto">Create your team to start challenging opponents, tracking matches, and climbing the ranks.</p>
           <Button variant="neon" onClick={() => navigate("/onboarding")}>Create Team</Button>
         </div>
       </PageTransition>
@@ -122,6 +127,15 @@ export default function TeamProfile() {
     } finally {
       setSaving(false);
     }
+  };
+
+
+  const inviteLink = `${window.location.origin}/auth?join=${team.join_code}`;
+  const copyInviteLink = () => {
+    navigator.clipboard.writeText(inviteLink);
+    setCopied(true);
+    toast.success("Invite link copied!");
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const ranks = getRanksForGame(team.game);
@@ -278,6 +292,31 @@ export default function TeamProfile() {
                 {Object.keys(team.map_pool).length === 0 && <p className="text-sm text-muted-foreground">No maps configured</p>}
               </div>
             </div>
+          </StaggerItem>
+
+          {/* Invite Link */}
+          <StaggerItem className="lg:col-span-3">
+            <div className="glass-panel p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Link className="h-4 w-4 text-primary" />
+                <span className="text-xs font-mono text-primary tracking-wider uppercase">Invite Link</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 bg-muted/50 border border-border/50 rounded-lg px-4 py-2.5 text-sm font-mono text-muted-foreground truncate">
+                  {inviteLink}
+                </div>
+                <Button variant="outline" size="sm" onClick={copyInviteLink} className="shrink-0 gap-1.5">
+                  {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copied ? "Copied" : "Copy"}
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Share this link to invite players to your team. Join code: <span className="font-mono text-foreground">{team.join_code}</span></p>
+            </div>
+          </StaggerItem>
+
+          {/* Match History */}
+          <StaggerItem className="lg:col-span-3">
+            <MatchHistory />
           </StaggerItem>
         </StaggerContainer>
       </div>

@@ -1,8 +1,9 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Menu } from "lucide-react";
+import { NotificationBell } from "@/components/NotificationBell";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function AppLayout() {
   return (
@@ -17,6 +18,10 @@ export default function AppLayout() {
             <div className="ml-4 flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-success animate-pulse-neon" />
               <span className="text-xs font-mono text-muted-foreground tracking-wider uppercase">Online</span>
+            </div>
+            <div className="ml-auto flex items-center gap-1">
+              <NotificationBell />
+              <ThemeToggle />
             </div>
           </header>
           <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
