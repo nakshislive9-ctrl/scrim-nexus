@@ -33,8 +33,11 @@ export default function TeamProfile() {
     return (
       <PageTransition>
         <div className="max-w-5xl mx-auto text-center py-20 space-y-4">
+          <div className="mx-auto h-16 w-16 rounded-2xl bg-muted/50 flex items-center justify-center mb-2">
+            <Users className="h-8 w-8 text-muted-foreground/40" />
+          </div>
           <h1 className="text-2xl font-bold">No Team Yet</h1>
-          <p className="text-muted-foreground">Create your team to get started.</p>
+          <p className="text-muted-foreground max-w-sm mx-auto">Create your team to start challenging opponents, tracking matches, and climbing the ranks.</p>
           <Button variant="neon" onClick={() => navigate("/onboarding")}>Create Team</Button>
         </div>
       </PageTransition>
