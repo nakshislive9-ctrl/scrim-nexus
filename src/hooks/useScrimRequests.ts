@@ -94,16 +94,41 @@ export function useScrimRequests() {
       challenger_captain_id: user.id,
       challenged_captain_id: challengedCaptainId,
     });
-    if (!error) fetchRequests();
+    if (!error) {
+      // Notify the challenged captain
+      await supabase.from("notifications").insert({
+        user_id: challengedCaptainId,
+        type: "challenge",
+        title: `${team.name} challenged your team!`,
+        message: "Check the Challenges page to accept or decline.",
+        link: "/challenges",
+      });
+      fetchRequests();
+    }
     return { error: error?.message ?? null };
   };
 
   const respondToChallenge = async (requestId: string, accept: boolean) => {
+    const request = incoming.find((r) => r.id === requestId);
     const { error } = await supabase
       .from("scrim_requests")
       .update({ status: accept ? "accepted" : "declined" })
       .eq("id", requestId);
-    if (!error) fetchRequests();
+    if (!error) {
+      // Notify the challenger captain
+      if (request) {
+        await supabase.from("notifications").insert({
+          user_id: request.challenger_captain_id,
+          type: accept ? "accepted" : "declined",
+          title: accept
+            ? `${request.challenged_team?.name ?? "A team"} accepted your challenge!`
+            : `${request.challenged_team?.name ?? "A team"} declined your challenge.`,
+          message: accept ? "Propose a time to schedule the match." : undefined,
+          link: "/challenges",
+        });
+      }
+      fetchRequests();
+    }
     return { error: error?.message ?? null };
   };
 
