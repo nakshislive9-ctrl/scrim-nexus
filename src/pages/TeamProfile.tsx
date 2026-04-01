@@ -128,6 +128,16 @@ export default function TeamProfile() {
     }
   };
 
+  const [copied, setCopied] = useState(false);
+
+  const inviteLink = `${window.location.origin}/auth?join=${team.join_code}`;
+  const copyInviteLink = () => {
+    navigator.clipboard.writeText(inviteLink);
+    setCopied(true);
+    toast.success("Invite link copied!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const ranks = getRanksForGame(team.game);
   const roles = getRolesForGame(team.game);
   return (
