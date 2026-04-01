@@ -14,6 +14,99 @@ export type Database = {
   }
   public: {
     Tables: {
+      match_results: {
+        Row: {
+          away_score: number
+          created_at: string
+          home_score: number
+          id: string
+          is_draw: boolean
+          mvp_player: string | null
+          notes: string | null
+          reported_by: string
+          scrim_id: string
+          updated_at: string
+          winner_team_id: string | null
+        }
+        Insert: {
+          away_score?: number
+          created_at?: string
+          home_score?: number
+          id?: string
+          is_draw?: boolean
+          mvp_player?: string | null
+          notes?: string | null
+          reported_by: string
+          scrim_id: string
+          updated_at?: string
+          winner_team_id?: string | null
+        }
+        Update: {
+          away_score?: number
+          created_at?: string
+          home_score?: number
+          id?: string
+          is_draw?: boolean
+          mvp_player?: string | null
+          notes?: string | null
+          reported_by?: string
+          scrim_id?: string
+          updated_at?: string
+          winner_team_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_results_scrim_id_fkey"
+            columns: ["scrim_id"]
+            isOneToOne: true
+            referencedRelation: "scrims"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_results_winner_team_id_fkey"
+            columns: ["winner_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          link: string | null
+          message: string | null
+          reference_id: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          message?: string | null
+          reference_id?: string | null
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          message?: string | null
+          reference_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       player_listings: {
         Row: {
           created_at: string
