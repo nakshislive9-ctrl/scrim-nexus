@@ -289,9 +289,29 @@ export default function TeamProfile() {
                     {map} {status && `· ${status}`}
                   </Badge>
                 ))}
-                {Object.keys(team.map_pool).length === 0 && <p className="text-sm text-muted-foreground">No maps configured</p>}
+          {/* Invite Link */}
+          <StaggerItem className="lg:col-span-3">
+            <div className="glass-panel p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Link className="h-4 w-4 text-primary" />
+                <span className="text-xs font-mono text-primary tracking-wider uppercase">Invite Link</span>
               </div>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 bg-muted/50 border border-border/50 rounded-lg px-4 py-2.5 text-sm font-mono text-muted-foreground truncate">
+                  {inviteLink}
+                </div>
+                <Button variant="outline" size="sm" onClick={copyInviteLink} className="shrink-0 gap-1.5">
+                  {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copied ? "Copied" : "Copy"}
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Share this link to invite players to your team. Join code: <span className="font-mono text-foreground">{team.join_code}</span></p>
             </div>
+          </StaggerItem>
+
+          {/* Match History */}
+          <StaggerItem className="lg:col-span-3">
+            <MatchHistory />
           </StaggerItem>
         </StaggerContainer>
       </div>
