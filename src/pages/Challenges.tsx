@@ -56,6 +56,7 @@ function RequestCard({
   onProposeTime: (time: string) => void;
   onConfirmTime: () => void;
   onRejectTime: () => void;
+  onOpenChat: () => void;
 }) {
   const [showTimeForm, setShowTimeForm] = useState(false);
   const otherTeam = type === "incoming" ? request.challenger_team : request.challenged_team;
