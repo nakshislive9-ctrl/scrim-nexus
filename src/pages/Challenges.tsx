@@ -1,11 +1,12 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Swords, Clock, Check, X, Send, CalendarClock } from "lucide-react";
+import { Swords, Clock, Check, X, Send, CalendarClock, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useScrimRequests, ScrimRequest } from "@/hooks/useScrimRequests";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { format } from "date-fns";
+import { ScrimChat } from "@/components/ScrimChat";
 
 function TimeProposalForm({ onSubmit }: { onSubmit: (time: string) => void }) {
   const [date, setDate] = useState("");
