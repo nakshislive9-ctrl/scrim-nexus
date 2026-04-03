@@ -126,6 +126,26 @@ export default function Auth() {
                 </div>
               </div>
 
+              {!isLogin && (
+                <div>
+                  <label className="text-xs font-mono text-muted-foreground tracking-wider uppercase block mb-2">
+                    Confirm Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="••••••••"
+                      required
+                      minLength={6}
+                      className="w-full bg-muted/50 border border-border/50 rounded-lg pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/30 transition-all"
+                    />
+                  </div>
+                </div>
+              )}
+
               <Button type="submit" variant="neon" className="w-full" disabled={loading}>
                 {loading ? (
                   <span className="animate-pulse">Processing...</span>
