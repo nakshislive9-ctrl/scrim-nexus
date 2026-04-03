@@ -97,6 +97,13 @@ function RequestCard({
           </div>
         )}
 
+        {/* Chat button for accepted/scheduled */}
+        {(isAccepted || timeConfirmed) && (
+          <Button size="sm" variant="outline" onClick={onOpenChat} className="shrink-0 gap-1.5">
+            <MessageCircle className="h-3.5 w-3.5" /> Chat
+          </Button>
+        )}
+
         {/* Pending outgoing: Waiting */}
         {type === "outgoing" && isPending && (
           <Badge variant="outline" className="text-[10px] text-muted-foreground shrink-0">Waiting for response...</Badge>
