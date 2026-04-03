@@ -130,7 +130,7 @@ export default function TeamProfile() {
   };
 
 
-  const inviteLink = `${window.location.origin}/auth?join=${team.join_code}`;
+  const inviteLink = `${window.location.origin}/join?code=${team.join_code}`;
   const copyInviteLink = () => {
     navigator.clipboard.writeText(inviteLink);
     setCopied(true);

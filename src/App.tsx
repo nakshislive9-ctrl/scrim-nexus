@@ -45,6 +45,9 @@ const App = () => (
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
+            <Route path="/join" element={
+              <ProtectedRoute><JoinTeam /></ProtectedRoute>
+            } />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
