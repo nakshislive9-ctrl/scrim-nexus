@@ -47,6 +47,7 @@ function RequestCard({
   onProposeTime,
   onConfirmTime,
   onRejectTime,
+  onOpenChat,
 }: {
   request: ScrimRequest;
   type: "incoming" | "outgoing";
