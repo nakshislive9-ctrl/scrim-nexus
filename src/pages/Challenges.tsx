@@ -165,6 +165,8 @@ function RequestCard({
 export default function Challenges() {
   const { user } = useAuth();
   const { incoming, outgoing, loading, respondToChallenge, proposeTime, confirmTime, rejectTime } = useScrimRequests();
+  const [openChatId, setOpenChatId] = useState<string | null>(null);
+  const [chatOpponentName, setChatOpponentName] = useState("");
 
   if (loading) {
     return (
@@ -184,35 +186,55 @@ export default function Challenges() {
   return (
     <PageTransition>
       <div className="max-w-5xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Challenges</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage incoming and outgoing scrim requests</p>
-        </div>
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Requests list */}
+          <div className={`flex-1 space-y-6 ${openChatId ? "hidden lg:block" : ""}`}>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">Challenges</h1>
+              <p className="text-sm text-muted-foreground mt-1">Manage incoming and outgoing scrim requests</p>
+            </div>
 
-        {allRequests.length === 0 ? (
-          <div className="glass-panel p-12 text-center">
-            <Swords className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground">No active challenges</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">Head to Find Scrims to challenge a team</p>
+            {allRequests.length === 0 ? (
+              <div className="glass-panel p-12 text-center">
+                <Swords className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground">No active challenges</p>
+                <p className="text-xs text-muted-foreground/60 mt-1">Head to Find Scrims to challenge a team</p>
+              </div>
+            ) : (
+              <StaggerContainer className="space-y-3">
+                {allRequests.map((r) => {
+                  const otherTeam = r._type === "incoming" ? r.challenger_team : r.challenged_team;
+                  return (
+                    <StaggerItem key={r.id}>
+                      <RequestCard
+                        request={r}
+                        type={r._type}
+                        userId={user?.id ?? ""}
+                        onAccept={() => respondToChallenge(r.id, true)}
+                        onDecline={() => respondToChallenge(r.id, false)}
+                        onProposeTime={(t) => proposeTime(r.id, t)}
+                        onConfirmTime={() => confirmTime(r.id)}
+                        onRejectTime={() => rejectTime(r.id)}
+                        onOpenChat={() => { setOpenChatId(r.id); setChatOpponentName(otherTeam?.name ?? "Opponent"); }}
+                      />
+                    </StaggerItem>
+                  );
+                })}
+              </StaggerContainer>
+            )}
           </div>
-        ) : (
-          <StaggerContainer className="space-y-3">
-            {allRequests.map((r) => (
-              <StaggerItem key={r.id}>
-                <RequestCard
-                  request={r}
-                  type={r._type}
-                  userId={user?.id ?? ""}
-                  onAccept={() => respondToChallenge(r.id, true)}
-                  onDecline={() => respondToChallenge(r.id, false)}
-                  onProposeTime={(t) => proposeTime(r.id, t)}
-                  onConfirmTime={() => confirmTime(r.id)}
-                  onRejectTime={() => rejectTime(r.id)}
-                />
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        )}
+
+          {/* Chat panel */}
+          {openChatId && (
+            <div className="w-full lg:w-96 glass-panel h-[500px] flex flex-col shrink-0">
+              <ScrimChat
+                scrimRequestId={openChatId}
+                opponentName={chatOpponentName}
+                onClose={() => setOpenChatId(null)}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </PageTransition>
   );
