@@ -273,7 +273,7 @@ export default function Onboarding() {
                   {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
                 </Button>
               </div>
-              <Button variant="neon" className="mt-4" onClick={() => navigate("/")}>
+              <Button variant="neon" className="mt-4" onClick={() => navigate("/dashboard")}>
                 Go to Dashboard
               </Button>
             </div>

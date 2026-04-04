@@ -103,7 +103,7 @@ export default function JoinTeam() {
             <AlertCircle className="h-10 w-10 text-destructive mx-auto" />
             <h1 className="text-xl font-bold">Something went wrong</h1>
             <p className="text-sm text-muted-foreground">{error}</p>
-            <Button variant="outline" onClick={() => navigate("/")}>Go Home</Button>
+            <Button variant="outline" onClick={() => navigate("/dashboard")}>Go Home</Button>
           </>
         )}
       </div>
