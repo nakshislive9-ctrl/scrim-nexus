@@ -71,7 +71,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <NavLink
                       to={item.url}
-                      end={item.url === "/"}
+                      end={item.url === "/dashboard"}
                       className={`transition-all duration-200 rounded-lg px-3 py-2.5 flex items-center gap-3 ${
                         isActive(item.url)
                           ? "bg-primary/10 text-primary border border-primary/20"
