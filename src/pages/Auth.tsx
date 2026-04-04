@@ -25,7 +25,7 @@ export default function Auth() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Welcome back, Captain!");
-        navigate("/");
+        navigate("/dashboard");
       } else {
         if (password !== confirmPassword) {
           toast.error("Passwords do not match");
