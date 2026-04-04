@@ -75,7 +75,7 @@ export default function JoinTeam() {
             <p className="text-sm text-muted-foreground">{teamInfo.game} · {teamInfo.rank}</p>
             <div className="flex gap-2 justify-center pt-2">
               <Button variant="neon" onClick={handleJoin}>Join Team</Button>
-              <Button variant="outline" onClick={() => navigate("/")}>Cancel</Button>
+              <Button variant="outline" onClick={() => navigate("/dashboard")}>Cancel</Button>
             </div>
           </>
         )}
