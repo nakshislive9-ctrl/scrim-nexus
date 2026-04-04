@@ -30,6 +30,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/onboarding" element={
               <ProtectedRoute><Onboarding /></ProtectedRoute>
@@ -37,7 +38,7 @@ const App = () => (
             <Route element={
               <ProtectedRoute><AppLayout /></ProtectedRoute>
             }>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/find-scrims" element={<FindScrims />} />
               <Route path="/find-players" element={<FindPlayers />} />
               <Route path="/team-profile" element={<TeamProfile />} />

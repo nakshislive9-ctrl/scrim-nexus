@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const navItems = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Find Scrims", url: "/find-scrims", icon: Crosshair },
   { title: "Challenges", url: "/challenges", icon: Swords },
   { title: "Find Players", url: "/find-players", icon: UserPlus },
