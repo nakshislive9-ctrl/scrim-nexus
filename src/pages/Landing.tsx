@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { Zap, Crosshair, Users, Swords, Shield, CalendarDays, ArrowRight, ChevronDown } from "lucide-react";
+import { Zap, Crosshair, Users, Swords, Shield, CalendarDays, ArrowRight, ChevronDown, Gamepad2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { GAMES } from "@/lib/gameData";
 
 function Section({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null);
@@ -58,6 +59,25 @@ function Stat({ value, label, index }: { value: string; label: string; index: nu
   );
 }
 
+function GameCard({ name, index }: { name: string; index: number }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  return (
+    <motion.div
+      ref={ref}
+      className="glass-panel-hover p-5 flex flex-col items-center gap-3 group cursor-default"
+      initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+      animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
+    >
+      <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:neon-glow transition-shadow duration-300">
+        <Gamepad2 className="h-6 w-6 text-primary" />
+      </div>
+      <span className="text-sm font-semibold text-foreground text-center">{name}</span>
+    </motion.div>
+  );
+}
+
 export default function Landing() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
@@ -100,6 +120,14 @@ export default function Landing() {
             </span>
           </div>
           <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => document.getElementById("games")?.scrollIntoView({ behavior: "smooth" })}
+              className="text-muted-foreground hover:text-foreground font-mono text-xs uppercase tracking-wider"
+            >
+              <Gamepad2 className="h-3.5 w-3.5 mr-1.5" /> Games
+            </Button>
             <Button variant="ghost" size="sm" onClick={() => navigate("/auth")} className="text-muted-foreground hover:text-foreground">
               Log in
             </Button>
@@ -112,9 +140,7 @@ export default function Landing() {
 
       {/* Hero */}
       <div ref={heroRef} className="relative min-h-[100vh] flex items-center justify-center pt-16">
-        {/* Grid background */}
         <div className="absolute inset-0 grid-bg opacity-40" />
-        {/* Radial glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
 
         <motion.div style={{ opacity: heroOpacity, y: heroY }} className="relative z-10 text-center px-6 max-w-3xl mx-auto">
@@ -163,7 +189,6 @@ export default function Landing() {
           </motion.div>
         </motion.div>
 
-        {/* Scroll indicator */}
         <motion.div
           className="absolute bottom-8 left-1/2 -translate-x-1/2"
           initial={{ opacity: 0 }}
@@ -183,10 +208,25 @@ export default function Landing() {
       <Section className="py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="glass-panel p-8 md:p-12 grid grid-cols-2 md:grid-cols-4 gap-8">
-            <Stat value="5" label="Games Supported" index={0} />
+            <Stat value="12" label="Games Supported" index={0} />
             <Stat value="24/7" label="Matchmaking" index={1} />
             <Stat value="∞" label="Scrims" index={2} />
             <Stat value="100%" label="Free" index={3} />
+          </div>
+        </div>
+      </Section>
+
+      {/* Games */}
+      <Section className="py-20 px-6" delay={0.1}>
+        <div id="games" className="max-w-6xl mx-auto scroll-mt-24">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Supported Games</h2>
+            <p className="text-muted-foreground max-w-md mx-auto">Full rank ladders, region servers, and role systems for every title.</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {GAMES.map((game, i) => (
+              <GameCard key={game} name={game} index={i} />
+            ))}
           </div>
         </div>
       </Section>
