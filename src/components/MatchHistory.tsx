@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useTeam } from "@/hooks/useTeam";
 import { format } from "date-fns";
-import { Trophy, Minus, X as XIcon, ChevronDown, ChevronUp } from "lucide-react";
+import { Trophy, Minus, X as XIcon, ChevronDown, ChevronUp, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface MatchResult {
@@ -12,6 +12,7 @@ interface MatchResult {
   home_score: number;
   away_score: number;
   is_draw: boolean;
+  is_abandoned: boolean;
   mvp_player: string | null;
   notes: string | null;
   created_at: string;
@@ -30,23 +31,29 @@ export function MatchHistory() {
     if (!team) { setLoading(false); return; }
 
     const fetch = async () => {
-      // Get completed scrims
+      // Get completed and abandoned scrims (past scheduled time)
       const { data: scrims } = await supabase
         .from("scrims")
         .select("id, home_team_id, away_team_id, scheduled_time, status")
         .or(`home_team_id.eq.${team.id},away_team_id.eq.${team.id}`)
-        .eq("status", "completed")
+        .in("status", ["completed", "scheduled"])
         .order("scheduled_time", { ascending: false });
 
-      if (!scrims?.length) { setResults([]); setLoading(false); return; }
+      // Filter: completed OR scheduled but in the past (abandoned)
+      const now = new Date();
+      const relevantScrims = (scrims ?? []).filter(s =>
+        s.status === "completed" || (s.status === "scheduled" && new Date(s.scheduled_time) < now)
+      );
 
-      const scrimIds = scrims.map((s) => s.id);
+      if (!relevantScrims.length) { setResults([]); setLoading(false); return; }
+
+      const scrimIds = relevantScrims.map((s) => s.id);
       const { data: matchResults } = await supabase
         .from("match_results")
         .select("*")
         .in("scrim_id", scrimIds);
 
-      const opponentIds = scrims.map((s) =>
+      const opponentIds = relevantScrims.map((s) =>
         s.home_team_id === team.id ? s.away_team_id : s.home_team_id
       );
       const { data: teams } = await supabase
@@ -58,10 +65,11 @@ export function MatchHistory() {
       const resultMap = new Map(matchResults?.map((r) => [r.scrim_id, r]) ?? []);
 
       setResults(
-        scrims.map((s) => {
+        relevantScrims.map((s) => {
           const isHome = s.home_team_id === team.id;
           const opId = isHome ? s.away_team_id : s.home_team_id;
           const result = resultMap.get(s.id);
+          const isAbandoned = s.status === "scheduled" && new Date(s.scheduled_time) < now;
           return {
             id: result?.id ?? s.id,
             scrim_id: s.id,
@@ -69,6 +77,7 @@ export function MatchHistory() {
             home_score: result?.home_score ?? 0,
             away_score: result?.away_score ?? 0,
             is_draw: result?.is_draw ?? false,
+            is_abandoned: isAbandoned,
             mvp_player: result?.mvp_player ?? null,
             notes: result?.notes ?? null,
             created_at: result?.created_at ?? s.scheduled_time,
@@ -86,14 +95,15 @@ export function MatchHistory() {
 
   if (loading) return null;
 
-  const wins = results.filter((r) => r.winner_team_id === team?.id).length;
-  const losses = results.filter((r) => r.winner_team_id && r.winner_team_id !== team?.id).length;
-  const draws = results.filter((r) => r.is_draw).length;
-  const noResult = results.filter((r) => !r.winner_team_id && !r.is_draw).length;
+  const wins = results.filter((r) => !r.is_abandoned && r.winner_team_id === team?.id).length;
+  const losses = results.filter((r) => !r.is_abandoned && r.winner_team_id && r.winner_team_id !== team?.id).length;
+  const draws = results.filter((r) => !r.is_abandoned && r.is_draw).length;
+  const abandoned = results.filter((r) => r.is_abandoned).length;
 
   const displayResults = expanded ? results : results.slice(0, 5);
 
   const getOutcome = (r: MatchResult) => {
+    if (r.is_abandoned) return { label: "Abandoned", color: "text-orange-400", icon: AlertTriangle };
     if (r.is_draw) return { label: "Draw", color: "text-warning", icon: Minus };
     if (!r.winner_team_id) return { label: "No Result", color: "text-muted-foreground", icon: Minus };
     if (r.winner_team_id === team?.id) return { label: "Win", color: "text-success", icon: Trophy };
@@ -108,7 +118,7 @@ export function MatchHistory() {
       </div>
 
       {/* Stats summary */}
-      <div className="grid grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-5 gap-3 mb-4">
         <div className="text-center p-2 rounded-lg bg-muted/30">
           <p className="text-lg font-bold font-mono text-success">{wins}</p>
           <p className="text-[10px] font-mono text-muted-foreground uppercase">Wins</p>
@@ -120,6 +130,10 @@ export function MatchHistory() {
         <div className="text-center p-2 rounded-lg bg-muted/30">
           <p className="text-lg font-bold font-mono text-warning">{draws}</p>
           <p className="text-[10px] font-mono text-muted-foreground uppercase">Draws</p>
+        </div>
+        <div className="text-center p-2 rounded-lg bg-muted/30">
+          <p className="text-lg font-bold font-mono text-orange-400">{abandoned}</p>
+          <p className="text-[10px] font-mono text-muted-foreground uppercase">Abandoned</p>
         </div>
         <div className="text-center p-2 rounded-lg bg-muted/30">
           <p className="text-lg font-bold font-mono text-foreground">{results.length}</p>
