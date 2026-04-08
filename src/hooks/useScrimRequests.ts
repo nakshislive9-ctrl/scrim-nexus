@@ -19,6 +19,22 @@ export interface ScrimRequest {
   challenged_team?: { name: string; game: string; rank: string; region: string | null };
 }
 
+// A request is expired if:
+// - pending and older than 48 hours
+// - accepted with no time proposal and older than 7 days
+// - accepted with confirmed time that has passed
+function isRequestExpired(r: ScrimRequest): boolean {
+  const now = Date.now();
+  const created = new Date(r.created_at).getTime();
+  const TWO_DAYS = 48 * 60 * 60 * 1000;
+  const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+
+  if (r.status === "pending" && now - created > TWO_DAYS) return true;
+  if (r.status === "accepted" && r.time_status === "no_proposal" && now - created > SEVEN_DAYS) return true;
+  if (r.status === "accepted" && r.time_status === "confirmed" && r.proposed_time && new Date(r.proposed_time).getTime() < now) return true;
+  return false;
+}
+
 export function useScrimRequests() {
   const { user } = useAuth();
   const { team } = useTeam();
@@ -64,8 +80,12 @@ export function useScrimRequests() {
       challenged_team: teamsMap.get(r.challenged_team_id),
     });
 
-    setIncoming((inData ?? []).map(enrich));
-    setOutgoing((outData ?? []).map(enrich));
+    const allIncoming = (inData ?? []).map(enrich);
+    const allOutgoing = (outData ?? []).map(enrich);
+
+    // Filter out expired requests from active views
+    setIncoming(allIncoming.filter(r => !isRequestExpired(r)));
+    setOutgoing(allOutgoing.filter(r => !isRequestExpired(r)));
     setLoading(false);
   }, [user]);
 
