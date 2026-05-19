@@ -105,7 +105,7 @@ export default function ScrimCalendar() {
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <h2 className="text-lg font-semibold font-mono">{format(currentMonth, "MMMM yyyy")}</h2>
-            <Button variant="ghost" size="icon" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
+            <Button variant="ghost" size="icon" aria-label="Next month" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
