@@ -152,6 +152,7 @@ export default function Profile() {
 
   return (
     <PageTransition>
+      <Seo title="My Profile | ScrimHQ" description="Manage your ScrimHQ identity, in-game details, ranks, roles, and personal match history." path="/profile" />
       <div className="max-w-3xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
