@@ -187,6 +187,7 @@ export default function Challenges() {
 
   return (
     <PageTransition>
+      <Seo title="Challenges | ScrimHQ" description="Manage incoming and outgoing scrim challenges, propose times, and confirm matches with opposing teams." path="/challenges" />
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Requests list */}
