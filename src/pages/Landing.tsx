@@ -5,6 +5,7 @@ import { Zap, Crosshair, Users, Swords, Shield, CalendarDays, ArrowRight, Chevro
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { GAMES } from "@/lib/gameData";
+import { Seo } from "@/components/Seo";
 
 function Section({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null);
