@@ -1,4 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
+import { Seo } from "@/components/Seo";
 import { Swords, Clock, Check, X, Send, CalendarClock, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
