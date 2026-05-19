@@ -101,7 +101,7 @@ export default function ScrimCalendar() {
         <div className="glass-panel p-6">
           {/* Month navigation */}
           <div className="flex items-center justify-between mb-6">
-            <Button variant="ghost" size="icon" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
+            <Button variant="ghost" size="icon" aria-label="Previous month" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <h2 className="text-lg font-semibold font-mono">{format(currentMonth, "MMMM yyyy")}</h2>
