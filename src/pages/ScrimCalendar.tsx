@@ -1,4 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
+import { Seo } from "@/components/Seo";
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Swords } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
