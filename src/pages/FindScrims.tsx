@@ -85,6 +85,7 @@ export default function FindScrims() {
 
   return (
     <PageTransition>
+      <Seo title="Find Scrims | ScrimHQ" description="Browse open scrim challenges across 12+ esports titles. Filter by game, rank, and region to find your next opponent." path="/find-scrims" />
       <div className="max-w-5xl mx-auto space-y-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Find Scrims</h1>
