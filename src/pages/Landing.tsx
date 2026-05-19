@@ -103,6 +103,11 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <Seo
+        title="ScrimHQ – Find Scrims, Build Teams & Compete in Esports"
+        description="ScrimHQ is the competitive scrimmage platform for esports teams. Find opponents, schedule scrims, manage rosters, and track match history across 12+ games."
+        path="/"
+      />
       {/* Nav */}
       <motion.nav
         className="fixed top-0 left-0 right-0 z-50 border-b border-border/30 bg-background/70 backdrop-blur-xl"
