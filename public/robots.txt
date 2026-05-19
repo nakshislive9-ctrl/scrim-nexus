@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://scrimhq.theboringlab.in/sitemap.xml
+Sitemap: https://scrimhq.lovable.app/sitemap.xml

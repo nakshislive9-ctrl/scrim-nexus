@@ -97,6 +97,7 @@ export function AppSidebar() {
         )}
         <button
           onClick={signOut}
+          aria-label="Sign out"
           className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all text-sm"
         >
           <LogOut className="h-4 w-4 shrink-0" />

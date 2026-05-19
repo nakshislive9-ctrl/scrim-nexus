@@ -1,4 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
+import { Seo } from "@/components/Seo";
 import { Swords, Clock, Check, X, Send, CalendarClock, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -186,6 +187,7 @@ export default function Challenges() {
 
   return (
     <PageTransition>
+      <Seo title="Challenges | ScrimHQ" description="Manage incoming and outgoing scrim challenges, propose times, and confirm matches with opposing teams." path="/challenges" />
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Requests list */}

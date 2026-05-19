@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { PageTransition } from "@/components/PageTransition";
+import { Seo } from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { LogIn, UserPlus, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
@@ -52,11 +53,16 @@ export default function Auth() {
 
   return (
     <PageTransition>
+      <Seo
+        title={isLogin ? "Sign In | ScrimHQ" : "Create Account | ScrimHQ"}
+        description={isLogin ? "Sign in to ScrimHQ to manage your team, schedule scrims, and track match history." : "Create your ScrimHQ captain account to build a team, find opponents, and compete in scrims."}
+        path="/auth"
+      />
       <div className="min-h-screen flex items-center justify-center p-4 bg-background">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
             <h1 className="text-3xl font-bold tracking-tight">
-              <span className="neon-text">ScrimHQ</span>
+              {isLogin ? <>Sign in to <span className="neon-text">ScrimHQ</span></> : <>Create your <span className="neon-text">ScrimHQ</span> account</>}
             </h1>
             <p className="text-sm text-muted-foreground mt-2">
               {isLogin ? "Sign in to manage your scrims" : "Create your captain account"}

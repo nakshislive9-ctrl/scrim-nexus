@@ -1,4 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
+import { Seo } from "@/components/Seo";
 import { Clock, TrendingUp, Activity, Swords, Calendar, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -106,6 +107,7 @@ export default function Dashboard() {
 
   return (
     <PageTransition>
+      <Seo title="Dashboard | ScrimHQ" description="Your ScrimHQ command center — track active scrims, reliability score, and upcoming matches at a glance." path="/dashboard" />
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>

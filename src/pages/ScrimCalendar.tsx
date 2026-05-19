@@ -1,4 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
+import { Seo } from "@/components/Seo";
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Swords } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -90,6 +91,7 @@ export default function ScrimCalendar() {
 
   return (
     <PageTransition>
+      <Seo title="Scrim Calendar | ScrimHQ" description="View all your scheduled scrims and upcoming matches in a monthly calendar view." path="/calendar" />
       <div className="max-w-5xl mx-auto space-y-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Scrim Calendar</h1>
@@ -99,11 +101,11 @@ export default function ScrimCalendar() {
         <div className="glass-panel p-6">
           {/* Month navigation */}
           <div className="flex items-center justify-between mb-6">
-            <Button variant="ghost" size="icon" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
+            <Button variant="ghost" size="icon" aria-label="Previous month" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <h2 className="text-lg font-semibold font-mono">{format(currentMonth, "MMMM yyyy")}</h2>
-            <Button variant="ghost" size="icon" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
+            <Button variant="ghost" size="icon" aria-label="Next month" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

@@ -124,9 +124,10 @@ export function ScrimChat({ scrimRequestId, opponentName, onClose }: ScrimChatPr
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
+            aria-label="Chat message"
             className="flex-1 bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
-          <Button size="icon" variant="neon" onClick={handleSend} disabled={!newMessage.trim() || sending}>
+          <Button size="icon" variant="neon" onClick={handleSend} disabled={!newMessage.trim() || sending} aria-label="Send message">
             <Send className="h-4 w-4" />
           </Button>
         </div>
