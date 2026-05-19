@@ -176,6 +176,7 @@ export default function FindPlayers() {
 
   return (
     <PageTransition>
+      <Seo title="Find Players & Teams | ScrimHQ" description="Discover solo players looking for a team or teams recruiting new members across competitive esports titles." path="/find-players" />
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex items-start justify-between flex-wrap gap-4">
           <div>
