@@ -91,6 +91,7 @@ export default function ScrimCalendar() {
 
   return (
     <PageTransition>
+      <Seo title="Scrim Calendar | ScrimHQ" description="View all your scheduled scrims and upcoming matches in a monthly calendar view." path="/calendar" />
       <div className="max-w-5xl mx-auto space-y-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Scrim Calendar</h1>
