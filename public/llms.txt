@@ -1,0 +1,15 @@
+# ScrimHQ
+
+> ScrimHQ is a competitive scrimmage platform for esports teams. Find opponents, schedule scrims, manage rosters, and track match history across 12+ games.
+
+ScrimHQ helps team captains and competitive players coordinate practice matches (scrims), build and manage their roster, send and accept challenges from other teams, and keep a verified record of match results and team reliability.
+
+## Pages
+
+- [Home](/): Overview of ScrimHQ, supported games, and how the platform works.
+- [Sign In or Create Account](/auth): Sign in or create a captain account to start using ScrimHQ.
+
+## Optional
+
+- [Robots](/robots.txt): Crawler rules.
+- [Sitemap](/sitemap.xml): Full list of public URLs.
