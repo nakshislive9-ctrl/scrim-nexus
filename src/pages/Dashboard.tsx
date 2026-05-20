@@ -223,9 +223,14 @@ export default function Dashboard() {
                 <Activity className="h-4 w-4 text-primary" />
                 <span className="text-xs font-mono text-primary tracking-wider uppercase">Weekly Trend</span>
               </div>
-              <div className="h-40">
+              <div className="h-40 relative">
+                {!hasPlayedScrims && (
+                  <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                    <span className="text-sm font-mono text-muted-foreground/70">N/A — play a scrim to see trend</span>
+                  </div>
+                )}
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={reliabilityData}>
+                  <LineChart data={emptyReliabilityData}>
                     <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(215 15% 50%)" }} axisLine={false} tickLine={false} />
                     <YAxis domain={[70, 100]} tick={{ fontSize: 11, fill: "hsl(215 15% 50%)" }} axisLine={false} tickLine={false} width={30} />
                     <Tooltip
@@ -244,6 +249,7 @@ export default function Dashboard() {
                       strokeWidth={2}
                       dot={{ fill: "hsl(185 100% 50%)", r: 3 }}
                       activeDot={{ r: 5, fill: "hsl(185 100% 50%)", stroke: "hsl(185 100% 50% / 0.3)", strokeWidth: 8 }}
+                      connectNulls={false}
                     />
                   </LineChart>
                 </ResponsiveContainer>
