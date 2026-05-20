@@ -309,6 +309,54 @@ export default function FindPlayers() {
           )}
         </div>
 
+        {/* My Listing */}
+        {myListing && (
+          <div className="glass-panel p-5 border-primary/30 bg-primary/5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-primary">
+                Your Active Listing · {activeTab === "players" ? "Looking for Team" : "Recruiting"}
+              </span>
+              <Button variant="ghost" size="sm" onClick={handleDeleteListing} className="h-7 gap-1.5 text-destructive hover:bg-destructive/10">
+                <X className="h-3 w-3" /> Remove
+              </Button>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h3 className="font-semibold text-foreground">{myListing.ign}</h3>
+                  <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary">{myListing.rank}</Badge>
+                </div>
+                {activeTab === "teams" && (
+                  <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/70 mt-2">Looking for</p>
+                )}
+                <div className={`flex items-center gap-4 flex-wrap ${activeTab === "teams" ? "mt-1" : "mt-2"}`}>
+                  <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Crosshair className="h-3 w-3" /> {myListing.game}
+                  </span>
+                  {myListing.role && (
+                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Shield className="h-3 w-3" /> {myListing.role}
+                    </span>
+                  )}
+                  {myListing.region && (
+                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Globe className="h-3 w-3" /> {myListing.region}
+                    </span>
+                  )}
+                  {myListing.level && (
+                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Trophy className="h-3 w-3" /> {activeTab === "teams" ? `Min Lv.${myListing.level}` : `Lv.${myListing.level}`}
+                    </span>
+                  )}
+                </div>
+                {myListing.description && (
+                  <p className="text-xs text-muted-foreground/80 mt-2">{myListing.description}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Listings */}
         {loading ? (
           <div className="flex justify-center py-12">
