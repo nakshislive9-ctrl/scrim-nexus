@@ -10,14 +10,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTeam } from "@/hooks/useTeam";
 import { format } from "date-fns";
 
-const reliabilityData = [
-  { day: "Mon", score: 82 },
-  { day: "Tue", score: 85 },
-  { day: "Wed", score: 78 },
-  { day: "Thu", score: 88 },
-  { day: "Fri", score: 91 },
-  { day: "Sat", score: 89 },
-  { day: "Sun", score: 93 },
+const emptyReliabilityData = [
+  { day: "Mon", score: null },
+  { day: "Tue", score: null },
+  { day: "Wed", score: null },
+  { day: "Thu", score: null },
+  { day: "Fri", score: null },
+  { day: "Sat", score: null },
+  { day: "Sun", score: null },
 ];
 
 interface UpcomingScrim {
@@ -36,6 +36,17 @@ export default function Dashboard() {
   const [upcomingScrims, setUpcomingScrims] = useState<UpcomingScrim[]>([]);
   const [loading, setLoading] = useState(true);
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
+  const [hasPlayedScrims, setHasPlayedScrims] = useState(false);
+
+  useEffect(() => {
+    if (!team) return;
+    supabase
+      .from("scrims")
+      .select("id", { count: "exact", head: true })
+      .or(`home_team_id.eq.${team.id},away_team_id.eq.${team.id}`)
+      .eq("status", "completed")
+      .then(({ count }) => setHasPlayedScrims((count ?? 0) > 0));
+  }, [team]);
 
   useEffect(() => {
     if (!team) { setLoading(false); return; }
@@ -188,8 +199,19 @@ export default function Dashboard() {
                 <span className="text-xs font-mono text-primary tracking-wider uppercase">Reliability</span>
               </div>
               <div className="flex-1 flex flex-col items-center justify-center">
-                <ReliabilityRing score={team?.reliability_score ?? 93} size={100} />
-                <p className="text-xs text-muted-foreground mt-3">+5% this week</p>
+                {hasPlayedScrims ? (
+                  <>
+                    <ReliabilityRing score={team?.reliability_score ?? 0} size={100} />
+                    <p className="text-xs text-muted-foreground mt-3">Updated live</p>
+                  </>
+                ) : (
+                  <>
+                    <div className="h-[100px] w-[100px] rounded-full border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
+                      <span className="text-2xl font-bold font-mono text-muted-foreground/60">N/A</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-3">No scrims played yet</p>
+                  </>
+                )}
               </div>
             </div>
           </StaggerItem>
@@ -201,9 +223,14 @@ export default function Dashboard() {
                 <Activity className="h-4 w-4 text-primary" />
                 <span className="text-xs font-mono text-primary tracking-wider uppercase">Weekly Trend</span>
               </div>
-              <div className="h-40">
+              <div className="h-40 relative">
+                {!hasPlayedScrims && (
+                  <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                    <span className="text-sm font-mono text-muted-foreground/70">N/A — play a scrim to see trend</span>
+                  </div>
+                )}
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={reliabilityData}>
+                  <LineChart data={emptyReliabilityData}>
                     <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(215 15% 50%)" }} axisLine={false} tickLine={false} />
                     <YAxis domain={[70, 100]} tick={{ fontSize: 11, fill: "hsl(215 15% 50%)" }} axisLine={false} tickLine={false} width={30} />
                     <Tooltip
@@ -222,6 +249,7 @@ export default function Dashboard() {
                       strokeWidth={2}
                       dot={{ fill: "hsl(185 100% 50%)", r: 3 }}
                       activeDot={{ r: 5, fill: "hsl(185 100% 50%)", stroke: "hsl(185 100% 50% / 0.3)", strokeWidth: 8 }}
+                      connectNulls={false}
                     />
                   </LineChart>
                 </ResponsiveContainer>
