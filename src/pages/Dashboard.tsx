@@ -199,8 +199,19 @@ export default function Dashboard() {
                 <span className="text-xs font-mono text-primary tracking-wider uppercase">Reliability</span>
               </div>
               <div className="flex-1 flex flex-col items-center justify-center">
-                <ReliabilityRing score={team?.reliability_score ?? 93} size={100} />
-                <p className="text-xs text-muted-foreground mt-3">+5% this week</p>
+                {hasPlayedScrims ? (
+                  <>
+                    <ReliabilityRing score={team?.reliability_score ?? 0} size={100} />
+                    <p className="text-xs text-muted-foreground mt-3">Updated live</p>
+                  </>
+                ) : (
+                  <>
+                    <div className="h-[100px] w-[100px] rounded-full border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
+                      <span className="text-2xl font-bold font-mono text-muted-foreground/60">N/A</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-3">No scrims played yet</p>
+                  </>
+                )}
               </div>
             </div>
           </StaggerItem>
