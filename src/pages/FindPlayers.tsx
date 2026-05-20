@@ -321,13 +321,22 @@ export default function FindPlayers() {
                 <div className="glass-panel-hover p-5 flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 flex-wrap">
-                      <h3 className="font-semibold text-foreground">{l.ign}</h3>
-                      {activeTab === "teams" && l.team_name && (
-                        <Badge variant="outline" className="text-[10px] font-mono border-warning/30 text-warning">{l.team_name}</Badge>
+                      <h3 className="font-semibold text-foreground">
+                        {activeTab === "teams" ? (l.team_name ?? "Team") : l.ign}
+                      </h3>
+                      {activeTab === "teams" && (
+                        <Badge variant="outline" className="text-[10px] font-mono border-warning/30 text-warning uppercase tracking-wider">
+                          Recruiting
+                        </Badge>
                       )}
                       <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary">{l.rank}</Badge>
                     </div>
-                    <div className="flex items-center gap-4 mt-2 flex-wrap">
+                    {activeTab === "teams" && (
+                      <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/70 mt-2">
+                        Looking for
+                      </p>
+                    )}
+                    <div className={`flex items-center gap-4 flex-wrap ${activeTab === "teams" ? "mt-1" : "mt-2"}`}>
                       <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                         <Crosshair className="h-3 w-3" /> {l.game}
                       </span>
@@ -343,10 +352,15 @@ export default function FindPlayers() {
                       )}
                       {l.level && (
                         <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <Trophy className="h-3 w-3" /> Lv.{l.level}
+                          <Trophy className="h-3 w-3" /> {activeTab === "teams" ? `Min Lv.${l.level}` : `Lv.${l.level}`}
                         </span>
                       )}
                     </div>
+                    {activeTab === "teams" && (
+                      <p className="text-[10px] text-muted-foreground/60 mt-2">
+                        Contact: <span className="font-mono text-muted-foreground/80">{l.ign}</span>
+                      </p>
+                    )}
                     {l.description && (
                       <p className="text-xs text-muted-foreground/80 mt-2 line-clamp-1">{l.description}</p>
                     )}
