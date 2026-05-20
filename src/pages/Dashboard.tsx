@@ -36,6 +36,17 @@ export default function Dashboard() {
   const [upcomingScrims, setUpcomingScrims] = useState<UpcomingScrim[]>([]);
   const [loading, setLoading] = useState(true);
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
+  const [hasPlayedScrims, setHasPlayedScrims] = useState(false);
+
+  useEffect(() => {
+    if (!team) return;
+    supabase
+      .from("scrims")
+      .select("id", { count: "exact", head: true })
+      .or(`home_team_id.eq.${team.id},away_team_id.eq.${team.id}`)
+      .eq("status", "completed")
+      .then(({ count }) => setHasPlayedScrims((count ?? 0) > 0));
+  }, [team]);
 
   useEffect(() => {
     if (!team) { setLoading(false); return; }
