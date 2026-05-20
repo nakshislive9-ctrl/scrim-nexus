@@ -226,24 +226,37 @@ export default function FindPlayers() {
               {activeTab === "players" ? "Post as a Player" : "Post as a Team"}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <input type="text" placeholder="Your IGN *" value={postIgn} onChange={(e) => setPostIgn(e.target.value)} className={inputClass} />
+              <input
+                type="text"
+                placeholder={activeTab === "teams" ? "Contact IGN (yours) *" : "Your IGN *"}
+                value={postIgn}
+                onChange={(e) => setPostIgn(e.target.value)}
+                className={inputClass}
+              />
               <select value={postGame} onChange={(e) => { setPostGame(e.target.value); setPostRank(""); setPostRole(""); setPostRegion(""); }} className={selectClass}>
                 <option value="">Select Game *</option>
                 {GAMES.map((g) => <option key={g} value={g}>{g}</option>)}
               </select>
               <select value={postRank} onChange={(e) => setPostRank(e.target.value)} className={selectClass} disabled={!postGame}>
-                <option value="">{postGame ? "Select Rank *" : "Select game first"}</option>
+                <option value="">{postGame ? (activeTab === "teams" ? "Required Rank *" : "Select Rank *") : "Select game first"}</option>
                 {postRanks.map((r) => <option key={r} value={r}>{r}</option>)}
               </select>
               <select value={postRole} onChange={(e) => setPostRole(e.target.value)} className={selectClass} disabled={!postGame}>
-                <option value="">{postGame ? "Select Role" : "Select game first"}</option>
+                <option value="">{postGame ? (activeTab === "teams" ? "Required Role" : "Select Role") : "Select game first"}</option>
                 {postRoles.map((r) => <option key={r} value={r}>{r}</option>)}
               </select>
               <select value={postRegion} onChange={(e) => setPostRegion(e.target.value)} className={selectClass} disabled={!postGame}>
                 <option value="">{postGame ? "Select Region" : "Select game first"}</option>
                 {postRegions.map((r) => <option key={r} value={r}>{r}</option>)}
               </select>
-              <input type="number" min="0" placeholder="Level" value={postLevel} onChange={(e) => setPostLevel(e.target.value)} className={inputClass} />
+              <input
+                type="number"
+                min="0"
+                placeholder={activeTab === "teams" ? "Minimum Level" : "Level"}
+                value={postLevel}
+                onChange={(e) => setPostLevel(e.target.value)}
+                className={inputClass}
+              />
             </div>
             <textarea placeholder="Short description (optional)" value={postDescription} onChange={(e) => setPostDescription(e.target.value)} rows={2}
               className={`${inputClass} resize-none`} />
