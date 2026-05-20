@@ -10,14 +10,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTeam } from "@/hooks/useTeam";
 import { format } from "date-fns";
 
-const reliabilityData = [
-  { day: "Mon", score: 82 },
-  { day: "Tue", score: 85 },
-  { day: "Wed", score: 78 },
-  { day: "Thu", score: 88 },
-  { day: "Fri", score: 91 },
-  { day: "Sat", score: 89 },
-  { day: "Sun", score: 93 },
+const emptyReliabilityData = [
+  { day: "Mon", score: null },
+  { day: "Tue", score: null },
+  { day: "Wed", score: null },
+  { day: "Thu", score: null },
+  { day: "Fri", score: null },
+  { day: "Sat", score: null },
+  { day: "Sun", score: null },
 ];
 
 interface UpcomingScrim {
