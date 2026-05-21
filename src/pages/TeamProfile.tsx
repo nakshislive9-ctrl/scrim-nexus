@@ -53,7 +53,6 @@ export default function TeamProfile() {
 
   const startEditing = () => {
     setEditMembers([...members]);
-    setNewMembers([]);
     setDeletedIds([]);
     setEditingRoster(true);
   };
