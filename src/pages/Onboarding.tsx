@@ -188,53 +188,52 @@ export default function Onboarding() {
 
           {step === 2 && (
             <div className="space-y-5">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-primary" />
-                  <span className="text-xs font-mono text-primary tracking-wider uppercase">Team Roster</span>
+              <div className="flex items-center gap-2 mb-2">
+                <Users className="h-4 w-4 text-primary" />
+                <span className="text-xs font-mono text-primary tracking-wider uppercase">Captain Profile</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Set up your own captain profile. Teammates can only join after creating an account and using your invite link — no fake players allowed.
+              </p>
+
+              <div className="p-4 rounded-xl border border-border/50 bg-muted/20 space-y-3">
+                <input
+                  type="text"
+                  value={captainIgn}
+                  onChange={(e) => setCaptainIgn(e.target.value)}
+                  placeholder="Your in-game name (IGN)"
+                  className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <select
+                    value={captainRole}
+                    onChange={(e) => setCaptainRole(e.target.value)}
+                    className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                  >
+                    <option value="">Your role...</option>
+                    {getRolesForGame(game).map((r) => <option key={r} value={r}>{r}</option>)}
+                  </select>
+                  <select
+                    value={captainRank}
+                    onChange={(e) => setCaptainRank(e.target.value)}
+                    className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  >
+                    <option value="">Your rank...</option>
+                    {getRanksForGame(game).map((r) => <option key={r} value={r}>{r}</option>)}
+                  </select>
                 </div>
-                <span className="text-xs text-muted-foreground">{members.length} players</span>
+                <input
+                  type="number"
+                  min="0"
+                  value={captainLevel}
+                  onChange={(e) => setCaptainLevel(e.target.value)}
+                  placeholder="Level (optional)"
+                  className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                />
               </div>
-              <p className="text-sm text-muted-foreground">Add your teammates. You'll be added as captain automatically.</p>
-
-              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-1">
-                {members.map((m, idx) => (
-                  <div key={idx} className="p-4 rounded-xl border border-border/50 bg-muted/20 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono text-muted-foreground">Player {idx + 1}</span>
-                      {members.length > 1 && (
-                        <button onClick={() => removeMember(idx)} className="text-muted-foreground hover:text-destructive transition-colors">
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      )}
-                    </div>
-                    <input type="text" value={m.ign} onChange={(e) => updateMember(idx, "ign", e.target.value)} placeholder="In-Game Name (IGN)"
-                      className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
-                    <div className="grid grid-cols-2 gap-2">
-                      <select value={m.role} onChange={(e) => updateMember(idx, "role", e.target.value)}
-                        className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all">
-                        <option value="">Role...</option>
-                        {getRolesForGame(game).map((r) => <option key={r} value={r}>{r}</option>)}
-                      </select>
-                      <select value={m.member_rank} onChange={(e) => updateMember(idx, "member_rank", e.target.value)}
-                        className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
-                        <option value="">Rank...</option>
-                        {getRanksForGame(game).map((r) => <option key={r} value={r}>{r}</option>)}
-                      </select>
-                    </div>
-                    <input type="number" min="0" value={m.level} onChange={(e) => updateMember(idx, "level", e.target.value)} placeholder="Level (optional)"
-                      className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
-                  </div>
-                ))}
-              </div>
-
-              {members.length < 9 && (
-                <Button variant="ghost" size="sm" onClick={addMember} className="w-full border border-dashed border-border/50">
-                  <Plus className="h-4 w-4 mr-1" /> Add Player
-                </Button>
-              )}
             </div>
           )}
+
 
           {step === 3 && (
             <div className="space-y-5 text-center">
