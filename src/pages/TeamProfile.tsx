@@ -1,5 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Plus, Trash2, Link, Copy, Check } from "lucide-react";
+import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Trash2, Link, Copy, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTeam, TeamMember } from "@/hooks/useTeam";
@@ -15,7 +15,7 @@ export default function TeamProfile() {
   const { team, members, loading, refetch } = useTeam();
   const [editingRoster, setEditingRoster] = useState(false);
   const [editMembers, setEditMembers] = useState<TeamMember[]>([]);
-  const [newMembers, setNewMembers] = useState<{ ign: string; role: string; member_rank: string; level: string }[]>([]);
+  
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -53,7 +53,6 @@ export default function TeamProfile() {
 
   const startEditing = () => {
     setEditMembers([...members]);
-    setNewMembers([]);
     setDeletedIds([]);
     setEditingRoster(true);
   };
@@ -61,7 +60,6 @@ export default function TeamProfile() {
   const cancelEditing = () => {
     setEditingRoster(false);
     setEditMembers([]);
-    setNewMembers([]);
     setDeletedIds([]);
   };
 
@@ -72,18 +70,6 @@ export default function TeamProfile() {
   const markDelete = (id: string) => {
     setDeletedIds((prev) => [...prev, id]);
     setEditMembers((prev) => prev.filter((m) => m.id !== id));
-  };
-
-  const addNewMember = () => {
-    setNewMembers((prev) => [...prev, { ign: "", role: "", member_rank: "", level: "" }]);
-  };
-
-  const updateNew = (idx: number, field: string, value: string) => {
-    setNewMembers((prev) => prev.map((m, i) => (i === idx ? { ...m, [field]: value } : m)));
-  };
-
-  const removeNew = (idx: number) => {
-    setNewMembers((prev) => prev.filter((_, i) => i !== idx));
   };
 
   const saveRoster = async () => {
@@ -106,20 +92,6 @@ export default function TeamProfile() {
         if (error) throw error;
       }
 
-      // Insert new
-      const toInsert = newMembers.filter((m) => m.ign.trim()).map((m) => ({
-        team_id: team.id,
-        ign: m.ign,
-        role: m.role || null,
-        member_rank: m.member_rank || null,
-        level: m.level || null,
-        is_captain: false,
-      }));
-      if (toInsert.length > 0) {
-        const { error } = await supabase.from("team_members").insert(toInsert);
-        if (error) throw error;
-      }
-
       toast.success("Roster updated!");
       setEditingRoster(false);
       refetch();
@@ -129,6 +101,7 @@ export default function TeamProfile() {
       setSaving(false);
     }
   };
+
 
 
   const inviteLink = `${window.location.origin}/join?code=${team.join_code}`;
@@ -239,37 +212,10 @@ export default function TeamProfile() {
                     </div>
                   ))}
 
-                  {/* New members */}
-                  {newMembers.map((m, idx) => (
-                    <div key={`new-${idx}`} className="p-3 rounded-xl border border-dashed border-primary/30 bg-primary/5 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono text-primary">New Player</span>
-                        <button onClick={() => removeNew(idx)} className="text-muted-foreground hover:text-destructive transition-colors">
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                      <input type="text" value={m.ign} onChange={(e) => updateNew(idx, "ign", e.target.value)} placeholder="IGN"
-                        className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
-                      <div className="grid grid-cols-2 gap-2">
-                        <select value={m.role} onChange={(e) => updateNew(idx, "role", e.target.value)}
-                          className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
-                          <option value="">Role...</option>
-                          {roles.map((r) => <option key={r} value={r}>{r}</option>)}
-                        </select>
-                        <select value={m.member_rank} onChange={(e) => updateNew(idx, "member_rank", e.target.value)}
-                          className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
-                          <option value="">Rank...</option>
-                          {ranks.map((r) => <option key={r} value={r}>{r}</option>)}
-                        </select>
-                      </div>
-                      <input type="number" min="0" value={m.level} onChange={(e) => updateNew(idx, "level", e.target.value)} placeholder="Level"
-                        className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
-                    </div>
-                  ))}
+                  <p className="text-[11px] text-muted-foreground text-center px-2 py-3 rounded-lg border border-dashed border-border/50">
+                    New players must sign up and join via your invite link below — fake players can't be added manually.
+                  </p>
 
-                  <Button variant="ghost" size="sm" onClick={addNewMember} className="w-full border border-dashed border-border/50">
-                    <Plus className="h-4 w-4 mr-1" /> Add Player
-                  </Button>
                 </div>
               )}
             </div>
