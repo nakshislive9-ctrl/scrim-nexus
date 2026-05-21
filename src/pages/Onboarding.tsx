@@ -10,15 +10,6 @@ import { toast } from "sonner";
 
 type MapStatus = "strong" | "weak" | null;
 
-interface MemberInput {
-  ign: string;
-  role: string;
-  member_rank: string;
-  level: string;
-}
-
-const emptyMember = (): MemberInput => ({ ign: "", role: "", member_rank: "", level: "" });
-
 export default function Onboarding() {
   const [step, setStep] = useState(0);
   const [teamName, setTeamName] = useState("");
@@ -26,7 +17,10 @@ export default function Onboarding() {
   const [rank, setRank] = useState("");
   const [region, setRegion] = useState("");
   const [mapPool, setMapPool] = useState<Record<string, MapStatus>>({});
-  const [members, setMembers] = useState<MemberInput[]>([emptyMember(), emptyMember(), emptyMember(), emptyMember()]);
+  const [captainIgn, setCaptainIgn] = useState("");
+  const [captainRole, setCaptainRole] = useState("");
+  const [captainRank, setCaptainRank] = useState("");
+  const [captainLevel, setCaptainLevel] = useState("");
   const [joinCode, setJoinCode] = useState("");
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -50,23 +44,10 @@ export default function Onboarding() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const updateMember = (idx: number, field: keyof MemberInput, value: string) => {
-    setMembers((prev) => prev.map((m, i) => (i === idx ? { ...m, [field]: value } : m)));
-  };
-
-  const addMember = () => {
-    if (members.length < 9) setMembers((prev) => [...prev, emptyMember()]);
-  };
-
-  const removeMember = (idx: number) => {
-    if (members.length > 1) setMembers((prev) => prev.filter((_, i) => i !== idx));
-  };
-
   const handleFinish = async () => {
     if (!user) return;
     setSaving(true);
     try {
-      // Create team
       const { data: team, error: teamErr } = await supabase
         .from("teams")
         .insert({
@@ -82,21 +63,15 @@ export default function Onboarding() {
 
       if (teamErr) throw teamErr;
 
-      // Add captain as a member
-      const captainName = user.user_metadata?.display_name || user.email || "Captain";
-      const allMembers = [
-        { team_id: team.id, ign: captainName, role: "Captain / IGL", member_rank: rank, level: "", is_captain: true },
-        ...members.filter((m) => m.ign.trim()).map((m) => ({
-          team_id: team.id,
-          ign: m.ign,
-          role: m.role || null,
-          member_rank: m.member_rank || null,
-          level: m.level || null,
-          is_captain: false,
-        })),
-      ];
-
-      const { error: memberErr } = await supabase.from("team_members").insert(allMembers);
+      const { error: memberErr } = await supabase.from("team_members").insert([{
+        team_id: team.id,
+        user_id: user.id,
+        ign: captainIgn.trim() || user.user_metadata?.display_name || user.email || "Captain",
+        role: captainRole || "Captain / IGL",
+        member_rank: captainRank || rank,
+        level: captainLevel || null,
+        is_captain: true,
+      }]);
       if (memberErr) throw memberErr;
 
       setJoinCode(team.join_code);
@@ -112,12 +87,13 @@ export default function Onboarding() {
   const steps = [
     { icon: Gamepad2, title: "Team Setup" },
     { icon: Map, title: "Map Pool" },
-    { icon: Users, title: "Roster" },
+    { icon: Users, title: "Captain" },
     { icon: Link2, title: "Invite" },
   ];
 
   const canProceedStep0 = teamName.trim() && game && rank;
-  const canProceedStep2 = members.some((m) => m.ign.trim());
+  const canProceedStep2 = captainIgn.trim().length > 0;
+
 
   return (
     <PageTransition>
