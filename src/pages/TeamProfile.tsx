@@ -315,6 +315,11 @@ export default function TeamProfile() {
             </div>
           </StaggerItem>
 
+          {/* Team Chat */}
+          <StaggerItem className="lg:col-span-3">
+            <TeamChat teamId={team.id} />
+          </StaggerItem>
+
           {/* Match History */}
           <StaggerItem className="lg:col-span-3">
             <MatchHistory />
