@@ -9,6 +9,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { MatchHistory } from "@/components/MatchHistory";
+import { TeamChat } from "@/components/TeamChat";
 
 export default function TeamProfile() {
   const { team, members, loading, refetch } = useTeam();
