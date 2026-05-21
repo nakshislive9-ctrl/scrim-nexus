@@ -84,6 +84,7 @@ export function NotificationBell() {
       case "accepted": return "✅";
       case "declined": return "❌";
       case "match": return "🎮";
+      case "team_chat": return "💬";
       default: return "🔔";
     }
   };
