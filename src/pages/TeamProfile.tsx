@@ -74,18 +74,6 @@ export default function TeamProfile() {
     setEditMembers((prev) => prev.filter((m) => m.id !== id));
   };
 
-  const addNewMember = () => {
-    setNewMembers((prev) => [...prev, { ign: "", role: "", member_rank: "", level: "" }]);
-  };
-
-  const updateNew = (idx: number, field: string, value: string) => {
-    setNewMembers((prev) => prev.map((m, i) => (i === idx ? { ...m, [field]: value } : m)));
-  };
-
-  const removeNew = (idx: number) => {
-    setNewMembers((prev) => prev.filter((_, i) => i !== idx));
-  };
-
   const saveRoster = async () => {
     setSaving(true);
     try {
@@ -106,20 +94,6 @@ export default function TeamProfile() {
         if (error) throw error;
       }
 
-      // Insert new
-      const toInsert = newMembers.filter((m) => m.ign.trim()).map((m) => ({
-        team_id: team.id,
-        ign: m.ign,
-        role: m.role || null,
-        member_rank: m.member_rank || null,
-        level: m.level || null,
-        is_captain: false,
-      }));
-      if (toInsert.length > 0) {
-        const { error } = await supabase.from("team_members").insert(toInsert);
-        if (error) throw error;
-      }
-
       toast.success("Roster updated!");
       setEditingRoster(false);
       refetch();
@@ -129,6 +103,7 @@ export default function TeamProfile() {
       setSaving(false);
     }
   };
+
 
 
   const inviteLink = `${window.location.origin}/join?code=${team.join_code}`;
