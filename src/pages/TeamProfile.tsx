@@ -1,5 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Plus, Trash2, Link, Copy, Check } from "lucide-react";
+import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Trash2, Link, Copy, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTeam, TeamMember } from "@/hooks/useTeam";
