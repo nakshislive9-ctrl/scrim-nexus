@@ -15,7 +15,7 @@ export default function TeamProfile() {
   const { team, members, loading, refetch } = useTeam();
   const [editingRoster, setEditingRoster] = useState(false);
   const [editMembers, setEditMembers] = useState<TeamMember[]>([]);
-  const [newMembers, setNewMembers] = useState<{ ign: string; role: string; member_rank: string; level: string }[]>([]);
+  
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
