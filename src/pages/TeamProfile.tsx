@@ -214,37 +214,10 @@ export default function TeamProfile() {
                     </div>
                   ))}
 
-                  {/* New members */}
-                  {newMembers.map((m, idx) => (
-                    <div key={`new-${idx}`} className="p-3 rounded-xl border border-dashed border-primary/30 bg-primary/5 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono text-primary">New Player</span>
-                        <button onClick={() => removeNew(idx)} className="text-muted-foreground hover:text-destructive transition-colors">
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                      <input type="text" value={m.ign} onChange={(e) => updateNew(idx, "ign", e.target.value)} placeholder="IGN"
-                        className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
-                      <div className="grid grid-cols-2 gap-2">
-                        <select value={m.role} onChange={(e) => updateNew(idx, "role", e.target.value)}
-                          className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
-                          <option value="">Role...</option>
-                          {roles.map((r) => <option key={r} value={r}>{r}</option>)}
-                        </select>
-                        <select value={m.member_rank} onChange={(e) => updateNew(idx, "member_rank", e.target.value)}
-                          className="bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30">
-                          <option value="">Rank...</option>
-                          {ranks.map((r) => <option key={r} value={r}>{r}</option>)}
-                        </select>
-                      </div>
-                      <input type="number" min="0" value={m.level} onChange={(e) => updateNew(idx, "level", e.target.value)} placeholder="Level"
-                        className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" />
-                    </div>
-                  ))}
+                  <p className="text-[11px] text-muted-foreground text-center px-2 py-3 rounded-lg border border-dashed border-border/50">
+                    New players must sign up and join via your invite link below — fake players can't be added manually.
+                  </p>
 
-                  <Button variant="ghost" size="sm" onClick={addNewMember} className="w-full border border-dashed border-border/50">
-                    <Plus className="h-4 w-4 mr-1" /> Add Player
-                  </Button>
                 </div>
               )}
             </div>
