@@ -9,6 +9,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { MatchHistory } from "@/components/MatchHistory";
+import { TeamChat } from "@/components/TeamChat";
 
 export default function TeamProfile() {
   const { team, members, loading, refetch } = useTeam();
@@ -312,6 +313,11 @@ export default function TeamProfile() {
               </div>
               <p className="text-xs text-muted-foreground mt-2">Share this link to invite players to your team. Join code: <span className="font-mono text-foreground">{team.join_code}</span></p>
             </div>
+          </StaggerItem>
+
+          {/* Team Chat */}
+          <StaggerItem className="lg:col-span-3">
+            <TeamChat teamId={team.id} />
           </StaggerItem>
 
           {/* Match History */}
