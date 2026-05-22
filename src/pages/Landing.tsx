@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { GAMES } from "@/lib/gameData";
 import { Seo } from "@/components/Seo";
+import { GameLogo } from "@/components/GameLogo";
 
 function Section({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null);
