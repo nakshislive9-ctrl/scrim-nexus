@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { GAMES } from "@/lib/gameData";
 import { Seo } from "@/components/Seo";
+import { GameLogo } from "@/components/GameLogo";
 
 function Section({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null);
@@ -72,7 +73,7 @@ function GameCard({ name, index }: { name: string; index: number }) {
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
     >
       <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:neon-glow transition-shadow duration-300">
-        <Gamepad2 className="h-6 w-6 text-primary" />
+        <GameLogo game={name} className="h-7 w-7" />
       </div>
       <span className="text-sm font-semibold text-foreground text-center">{name}</span>
     </motion.div>
