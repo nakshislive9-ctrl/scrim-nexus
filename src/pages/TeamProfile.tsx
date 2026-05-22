@@ -1,5 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Trash2, Link, Copy, Check } from "lucide-react";
+import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Trash2, Link, Copy, Check, Swords, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTeam, TeamMember } from "@/hooks/useTeam";
@@ -10,8 +10,51 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { MatchHistory } from "@/components/MatchHistory";
 import { TeamChat } from "@/components/TeamChat";
+import { useAuth } from "@/contexts/AuthContext";
+
+function CreateLobbyPanel({ teamId, game }: { teamId: string; game: string }) {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [creating, setCreating] = useState(false);
+
+  const createLobby = async () => {
+    if (!user) return;
+    setCreating(true);
+    const { data, error } = await supabase
+      .from("scrim_lobbies")
+      .insert({ team_a_id: teamId, team_a_captain_id: user.id, game })
+      .select("id")
+      .single();
+    setCreating(false);
+    if (error || !data) {
+      toast.error(error?.message ?? "Couldn't create lobby");
+      return;
+    }
+    navigate(`/lobby/${data.id}`);
+  };
+
+  return (
+    <div className="glass-panel p-6">
+      <div className="flex items-center gap-2 mb-4">
+        <Swords className="h-4 w-4 text-primary" />
+        <span className="text-xs font-mono text-primary tracking-wider uppercase">Public Match Lobby</span>
+      </div>
+      <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
+        <p className="text-sm text-muted-foreground">
+          Open a public lobby and share the link. Any other team's captain can claim the opponent slot to start a scrim.
+        </p>
+        <Button onClick={createLobby} disabled={creating} className="shrink-0">
+          {creating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Swords className="h-4 w-4 mr-2" />}
+          Create Lobby
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 
 export default function TeamProfile() {
+  const { user } = useAuth();
   const { team, members, loading, refetch } = useTeam();
   const [editingRoster, setEditingRoster] = useState(false);
   const [editMembers, setEditMembers] = useState<TeamMember[]>([]);
