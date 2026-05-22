@@ -261,6 +261,13 @@ export default function TeamProfile() {
             </div>
           </StaggerItem>
 
+          {/* Public Match Lobby */}
+          {team.captain_id === user?.id && (
+            <StaggerItem className="lg:col-span-3">
+              <CreateLobbyPanel teamId={team.id} game={team.game} />
+            </StaggerItem>
+          )}
+
           {/* Team Chat */}
           <StaggerItem className="lg:col-span-3">
             <TeamChat teamId={team.id} />
