@@ -225,6 +225,69 @@ export type Database = {
         }
         Relationships: []
       }
+      scrim_lobbies: {
+        Row: {
+          created_at: string
+          current_turn_captain_id: string | null
+          discord_pinged_at: string | null
+          game: string
+          id: string
+          status: string
+          team_a_captain_id: string
+          team_a_id: string
+          team_b_captain_id: string | null
+          team_b_id: string | null
+          turn_deadline: string | null
+          updated_at: string
+          veto_state: Json
+        }
+        Insert: {
+          created_at?: string
+          current_turn_captain_id?: string | null
+          discord_pinged_at?: string | null
+          game: string
+          id?: string
+          status?: string
+          team_a_captain_id: string
+          team_a_id: string
+          team_b_captain_id?: string | null
+          team_b_id?: string | null
+          turn_deadline?: string | null
+          updated_at?: string
+          veto_state?: Json
+        }
+        Update: {
+          created_at?: string
+          current_turn_captain_id?: string | null
+          discord_pinged_at?: string | null
+          game?: string
+          id?: string
+          status?: string
+          team_a_captain_id?: string
+          team_a_id?: string
+          team_b_captain_id?: string | null
+          team_b_id?: string | null
+          turn_deadline?: string | null
+          updated_at?: string
+          veto_state?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scrim_lobbies_team_a_id_fkey"
+            columns: ["team_a_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scrim_lobbies_team_b_id_fkey"
+            columns: ["team_b_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       scrim_requests: {
         Row: {
           challenged_captain_id: string
@@ -415,6 +478,7 @@ export type Database = {
         Row: {
           captain_id: string
           created_at: string
+          discord_webhook_url: string | null
           game: string
           id: string
           join_code: string
@@ -428,6 +492,7 @@ export type Database = {
         Insert: {
           captain_id: string
           created_at?: string
+          discord_webhook_url?: string | null
           game: string
           id?: string
           join_code?: string
@@ -441,6 +506,7 @@ export type Database = {
         Update: {
           captain_id?: string
           created_at?: string
+          discord_webhook_url?: string | null
           game?: string
           id?: string
           join_code?: string
@@ -494,6 +560,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_short_code: { Args: never; Returns: string }
       is_team_member: {
         Args: { _team_id: string; _user_id: string }
         Returns: boolean

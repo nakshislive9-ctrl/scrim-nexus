@@ -18,6 +18,7 @@ import Auth from "@/pages/Auth";
 import Challenges from "@/pages/Challenges";
 import ScrimCalendar from "@/pages/ScrimCalendar";
 import JoinTeam from "@/pages/JoinTeam";
+import Lobby from "@/pages/Lobby";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,9 @@ const App = () => (
             </Route>
             <Route path="/join" element={
               <ProtectedRoute><JoinTeam /></ProtectedRoute>
+            } />
+            <Route path="/lobby/:id" element={
+              <ProtectedRoute><Lobby /></ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />
           </Routes>
