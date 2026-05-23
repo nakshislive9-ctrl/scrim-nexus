@@ -110,6 +110,8 @@ export default function Lobby() {
       return;
     }
     toast({ title: "Locked in!", description: "Map veto unlocking soon." });
+    // Fire-and-forget Discord ping to team A's webhook
+    supabase.functions.invoke("discord-ping-lobby", { body: { lobby_id: lobby.id } }).catch(() => {});
     loadLobby();
   };
 

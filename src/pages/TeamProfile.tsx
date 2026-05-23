@@ -1,5 +1,5 @@
 import { PageTransition, StaggerContainer, StaggerItem } from "@/components/PageTransition";
-import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Trash2, Link, Copy, Check, Swords, Loader2 } from "lucide-react";
+import { Shield, Trophy, XCircle, CheckCircle, Users, MapPin, Gamepad2, Pencil, Save, X, Trash2, Link, Copy, Check, Swords, Loader2, MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTeam, TeamMember } from "@/hooks/useTeam";
@@ -48,6 +48,57 @@ function CreateLobbyPanel({ teamId, game }: { teamId: string; game: string }) {
           Create Lobby
         </Button>
       </div>
+    </div>
+  );
+}
+
+function DiscordWebhookPanel({ teamId, initialUrl }: { teamId: string; initialUrl: string | null }) {
+  const [url, setUrl] = useState(initialUrl ?? "");
+  const [saving, setSaving] = useState(false);
+  const save = async () => {
+    setSaving(true);
+    const trimmed = url.trim();
+    if (trimmed && !/^https:\/\/(canary\.|ptb\.)?discord(app)?\.com\/api\/webhooks\//.test(trimmed)) {
+      toast.error("That doesn't look like a Discord webhook URL.");
+      setSaving(false);
+      return;
+    }
+    const { error } = await supabase
+      .from("teams")
+      .update({ discord_webhook_url: trimmed || null })
+      .eq("id", teamId);
+    setSaving(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success(trimmed ? "Discord webhook saved" : "Discord webhook removed");
+  };
+  return (
+    <div className="glass-panel p-6">
+      <div className="flex items-center gap-2 mb-3">
+        <MessageSquare className="h-4 w-4 text-primary" />
+        <span className="text-xs font-mono text-primary tracking-wider uppercase">Discord Match Alerts</span>
+      </div>
+      <p className="text-sm text-muted-foreground mb-4">
+        Paste your team's Discord webhook URL. We'll ping your channel the moment an opponent locks into one of your public lobbies.
+      </p>
+      <div className="flex flex-col md:flex-row gap-3">
+        <input
+          type="url"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="https://discord.com/api/webhooks/…"
+          className="flex-1 bg-muted/50 border border-border/50 rounded-lg px-4 py-2.5 text-sm font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+        />
+        <Button onClick={save} disabled={saving} className="shrink-0">
+          {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+          Save
+        </Button>
+      </div>
+      <p className="text-[11px] text-muted-foreground mt-2">
+        Server Settings → Integrations → Webhooks → New Webhook → Copy URL.
+      </p>
     </div>
   );
 }
@@ -304,11 +355,16 @@ export default function TeamProfile() {
             </div>
           </StaggerItem>
 
-          {/* Public Match Lobby */}
+          {/* Public Match Lobby + Discord */}
           {team.captain_id === user?.id && (
-            <StaggerItem className="lg:col-span-3">
-              <CreateLobbyPanel teamId={team.id} game={team.game} />
-            </StaggerItem>
+            <>
+              <StaggerItem className="lg:col-span-3">
+                <CreateLobbyPanel teamId={team.id} game={team.game} />
+              </StaggerItem>
+              <StaggerItem className="lg:col-span-3">
+                <DiscordWebhookPanel teamId={team.id} initialUrl={(team as any).discord_webhook_url ?? null} />
+              </StaggerItem>
+            </>
           )}
 
           {/* Team Chat */}
