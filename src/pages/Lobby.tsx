@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { Copy, Check, Swords, Users, Loader2, ArrowLeft } from "lucide-react";
 import { GameLogo } from "@/components/GameLogo";
+import { MapVeto } from "@/components/MapVeto";
 
 interface Lobby {
   id: string;
@@ -17,6 +18,9 @@ interface Lobby {
   team_b_captain_id: string | null;
   game: string;
   status: string;
+  veto_state: any;
+  current_turn_captain_id: string | null;
+  turn_deadline: string | null;
 }
 
 interface TeamLite {
@@ -195,9 +199,23 @@ export default function Lobby() {
           </p>
         </div>
 
-        {lobby.team_b_id && (isCaptainOfA || isCaptainOfB) && (
-          <div className="mt-6 glass-panel p-6 text-center border border-primary/30">
-            <p className="text-sm text-muted-foreground">Both teams locked in. Map veto interface coming in the next phase.</p>
+        {lobby.team_b_id && teamA && teamB && (
+          <div className="mt-6">
+            <MapVeto
+              lobbyId={lobby.id}
+              status={lobby.status}
+              game={lobby.game}
+              teamACaptainId={lobby.team_a_captain_id}
+              teamBCaptainId={lobby.team_b_captain_id}
+              teamAName={teamA.name}
+              teamBName={teamB.name}
+              vetoState={
+                lobby.veto_state ?? { steps: [], remaining: [], picked: [] }
+              }
+              currentTurnCaptainId={lobby.current_turn_captain_id}
+              turnDeadline={lobby.turn_deadline}
+              onChange={loadLobby}
+            />
           </div>
         )}
       </div>
