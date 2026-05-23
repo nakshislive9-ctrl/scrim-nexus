@@ -90,7 +90,7 @@ export function MapVeto({
         .from("scrim_lobbies")
         .update({
           status: "veto",
-          veto_state: { steps: [], remaining: pool, picked: [] },
+          veto_state: { steps: [], remaining: pool, picked: [] } as any,
           current_turn_captain_id: teamACaptainId,
           turn_deadline: new Date(Date.now() + TURN_SECONDS * 1000).toISOString(),
         })
