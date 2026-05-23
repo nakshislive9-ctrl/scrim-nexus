@@ -17,6 +17,9 @@ interface Lobby {
   team_b_captain_id: string | null;
   game: string;
   status: string;
+  veto_state: any;
+  current_turn_captain_id: string | null;
+  turn_deadline: string | null;
 }
 
 interface TeamLite {
