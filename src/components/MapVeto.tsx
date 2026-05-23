@@ -118,7 +118,7 @@ export function MapVeto({
     const { error } = await supabase
       .from("scrim_lobbies")
       .update({
-        veto_state: { steps: nextSteps, remaining: nextRemaining, picked: nextPicked },
+        veto_state: { steps: nextSteps, remaining: nextRemaining, picked: nextPicked } as any,
         current_turn_captain_id: nextCaptain,
         turn_deadline: done ? null : new Date(Date.now() + TURN_SECONDS * 1000).toISOString(),
         status: done ? "active" : "veto",
