@@ -355,11 +355,16 @@ export default function TeamProfile() {
             </div>
           </StaggerItem>
 
-          {/* Public Match Lobby */}
+          {/* Public Match Lobby + Discord */}
           {team.captain_id === user?.id && (
-            <StaggerItem className="lg:col-span-3">
-              <CreateLobbyPanel teamId={team.id} game={team.game} />
-            </StaggerItem>
+            <>
+              <StaggerItem className="lg:col-span-3">
+                <CreateLobbyPanel teamId={team.id} game={team.game} />
+              </StaggerItem>
+              <StaggerItem className="lg:col-span-3">
+                <DiscordWebhookPanel teamId={team.id} initialUrl={(team as any).discord_webhook_url ?? null} />
+              </StaggerItem>
+            </>
           )}
 
           {/* Team Chat */}
