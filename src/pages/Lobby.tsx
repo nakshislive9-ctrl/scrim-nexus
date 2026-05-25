@@ -9,6 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import { Copy, Check, Swords, Users, Loader2, ArrowLeft } from "lucide-react";
 import { GameLogo } from "@/components/GameLogo";
 import { MapVeto } from "@/components/MapVeto";
+import { MatchResult } from "@/components/MatchResult";
 
 interface Lobby {
   id: string;
