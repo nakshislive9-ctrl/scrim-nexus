@@ -203,7 +203,7 @@ export default function Lobby() {
         </div>
 
         {lobby.team_b_id && teamA && teamB && (
-          <div className="mt-6">
+          <div className="mt-6 space-y-6">
             <MapVeto
               lobbyId={lobby.id}
               status={lobby.status}
@@ -217,6 +217,18 @@ export default function Lobby() {
               }
               currentTurnCaptainId={lobby.current_turn_captain_id}
               turnDeadline={lobby.turn_deadline}
+              onChange={loadLobby}
+            />
+            <MatchResult
+              lobbyId={lobby.id}
+              status={lobby.status}
+              teamAId={lobby.team_a_id}
+              teamBId={lobby.team_b_id}
+              teamACaptainId={lobby.team_a_captain_id}
+              teamBCaptainId={lobby.team_b_captain_id!}
+              teamAName={teamA.name}
+              teamBName={teamB.name}
+              pickedMap={lobby.veto_state?.picked?.[0] ?? null}
               onChange={loadLobby}
             />
           </div>
