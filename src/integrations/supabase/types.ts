@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      lobby_results: {
+        Row: {
+          created_at: string
+          id: string
+          lobby_id: string
+          map: string | null
+          screenshot_url: string | null
+          submitted_by: string
+          team_a_score: number
+          team_b_score: number
+          team_id: string
+          team_side: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lobby_id: string
+          map?: string | null
+          screenshot_url?: string | null
+          submitted_by: string
+          team_a_score?: number
+          team_b_score?: number
+          team_id: string
+          team_side: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lobby_id?: string
+          map?: string | null
+          screenshot_url?: string | null
+          submitted_by?: string
+          team_a_score?: number
+          team_b_score?: number
+          team_id?: string
+          team_side?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       match_results: {
         Row: {
           away_score: number
@@ -230,6 +272,9 @@ export type Database = {
           created_at: string
           current_turn_captain_id: string | null
           discord_pinged_at: string | null
+          final_screenshot_url: string | null
+          final_team_a_score: number | null
+          final_team_b_score: number | null
           game: string
           id: string
           status: string
@@ -245,6 +290,9 @@ export type Database = {
           created_at?: string
           current_turn_captain_id?: string | null
           discord_pinged_at?: string | null
+          final_screenshot_url?: string | null
+          final_team_a_score?: number | null
+          final_team_b_score?: number | null
           game: string
           id?: string
           status?: string
@@ -260,6 +308,9 @@ export type Database = {
           created_at?: string
           current_turn_captain_id?: string | null
           discord_pinged_at?: string | null
+          final_screenshot_url?: string | null
+          final_team_a_score?: number | null
+          final_team_b_score?: number | null
           game?: string
           id?: string
           status?: string
