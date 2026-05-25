@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
 
     const { data: lobby, error } = await supabase
       .from("scrim_lobbies")
-      .select("id, game, status, team_a_id, team_b_id, discord_pinged_at")
+      .select("id, game, status, team_a_id, team_a_captain_id, team_b_id, team_b_captain_id, discord_pinged_at")
       .eq("id", lobby_id)
       .maybeSingle();
 
