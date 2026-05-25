@@ -59,6 +59,14 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Only the two lobby captains can trigger the ping
+    if (callerId !== lobby.team_a_captain_id && callerId !== lobby.team_b_captain_id) {
+      return new Response(JSON.stringify({ error: "forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (!lobby.team_b_id) {
       return new Response(JSON.stringify({ skipped: "no opponent yet" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
