@@ -10,6 +10,7 @@ import { Copy, Check, Swords, Users, Loader2, ArrowLeft } from "lucide-react";
 import { GameLogo } from "@/components/GameLogo";
 import { MapVeto } from "@/components/MapVeto";
 import { MatchResult } from "@/components/MatchResult";
+import { LobbyRoom } from "@/components/LobbyRoom";
 
 interface Lobby {
   id: string;
@@ -200,6 +201,13 @@ export default function Lobby() {
 
         {lobby.team_b_id && teamA && teamB && (
           <div className="mt-6 space-y-6">
+            <LobbyRoom
+              lobbyId={lobby.id}
+              teamAId={lobby.team_a_id}
+              teamBId={lobby.team_b_id}
+              teamAName={teamA.name}
+              teamBName={teamB.name}
+            />
             <MapVeto
               lobbyId={lobby.id}
               status={lobby.status}
