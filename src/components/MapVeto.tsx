@@ -86,15 +86,7 @@ export function MapVeto({
       if (user?.id !== teamACaptainId && user?.id !== teamBCaptainId) return;
       const pool = getMapsForGame(game).slice(0, 7);
       if (pool.length === 0) return;
-      await supabase
-        .from("scrim_lobbies")
-        .update({
-          status: "veto",
-          veto_state: { steps: [], remaining: pool, picked: [] } as any,
-          current_turn_captain_id: teamACaptainId,
-          turn_deadline: new Date(Date.now() + TURN_SECONDS * 1000).toISOString(),
-        })
-        .eq("id", lobbyId);
+      await supabase.rpc("start_veto", { _lobby_id: lobbyId, _pool: pool as any });
       onChange();
     };
     init();
@@ -104,26 +96,7 @@ export function MapVeto({
   const advance = async (map: string) => {
     if (!currentStep || !user) return;
     setWorking(true);
-    const nextSteps = [
-      ...vetoState.steps,
-      { action: currentStep.action, team: currentStep.team, map, at: new Date().toISOString() },
-    ];
-    const nextRemaining = vetoState.remaining.filter((m) => m !== map);
-    const nextPicked = currentStep.action === "pick" ? [...vetoState.picked, map] : vetoState.picked;
-    const nextIndex = nextSteps.length;
-    const done = nextIndex >= SEQUENCE.length;
-    const nextTeam = done ? null : SEQUENCE[nextIndex].team;
-    const nextCaptain = nextTeam === "A" ? teamACaptainId : nextTeam === "B" ? teamBCaptainId : null;
-
-    const { error } = await supabase
-      .from("scrim_lobbies")
-      .update({
-        veto_state: { steps: nextSteps, remaining: nextRemaining, picked: nextPicked } as any,
-        current_turn_captain_id: nextCaptain,
-        turn_deadline: done ? null : new Date(Date.now() + TURN_SECONDS * 1000).toISOString(),
-        status: done ? "active" : "veto",
-      })
-      .eq("id", lobbyId);
+    const { error } = await supabase.rpc("submit_veto_action", { _lobby_id: lobbyId, _map: map });
     setWorking(false);
     if (error) {
       toast({ title: "Couldn't submit", description: error.message, variant: "destructive" });

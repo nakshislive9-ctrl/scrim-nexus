@@ -9,6 +9,30 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
+    // Require a valid Supabase JWT
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const token = authHeader.replace(/^Bearer\s+/i, "");
+    if (!token) {
+      return new Response(JSON.stringify({ error: "unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const authClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: `Bearer ${token}` } } },
+    );
+    const { data: userData, error: userErr } = await authClient.auth.getUser(token);
+    if (userErr || !userData?.user) {
+      return new Response(JSON.stringify({ error: "unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const callerId = userData.user.id;
+
     const { lobby_id } = await req.json();
     if (!lobby_id || typeof lobby_id !== "string") {
       return new Response(JSON.stringify({ error: "lobby_id required" }), {
@@ -24,13 +48,21 @@ Deno.serve(async (req) => {
 
     const { data: lobby, error } = await supabase
       .from("scrim_lobbies")
-      .select("id, game, status, team_a_id, team_b_id, discord_pinged_at")
+      .select("id, game, status, team_a_id, team_a_captain_id, team_b_id, team_b_captain_id, discord_pinged_at")
       .eq("id", lobby_id)
       .maybeSingle();
 
     if (error || !lobby) {
       return new Response(JSON.stringify({ error: "lobby not found" }), {
         status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Only the two lobby captains can trigger the ping
+    if (callerId !== lobby.team_a_captain_id && callerId !== lobby.team_b_captain_id) {
+      return new Response(JSON.stringify({ error: "forbidden" }), {
+        status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

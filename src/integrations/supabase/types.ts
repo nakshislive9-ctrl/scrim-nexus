@@ -611,10 +611,107 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      find_team_by_join_code: {
+        Args: { _code: string }
+        Returns: {
+          game: string
+          id: string
+          name: string
+          rank: string
+        }[]
+      }
       generate_short_code: { Args: never; Returns: string }
+      get_my_team_secrets: {
+        Args: { _team_id: string }
+        Returns: {
+          discord_webhook_url: string
+          join_code: string
+        }[]
+      }
       is_team_member: {
         Args: { _team_id: string; _user_id: string }
         Returns: boolean
+      }
+      join_scrim_lobby: {
+        Args: { _lobby_id: string }
+        Returns: {
+          created_at: string
+          current_turn_captain_id: string | null
+          discord_pinged_at: string | null
+          final_screenshot_url: string | null
+          final_team_a_score: number | null
+          final_team_b_score: number | null
+          game: string
+          id: string
+          status: string
+          team_a_captain_id: string
+          team_a_id: string
+          team_b_captain_id: string | null
+          team_b_id: string | null
+          turn_deadline: string | null
+          updated_at: string
+          veto_state: Json
+        }
+        SetofOptions: {
+          from: "*"
+          to: "scrim_lobbies"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      start_veto: {
+        Args: { _lobby_id: string; _pool: Json }
+        Returns: {
+          created_at: string
+          current_turn_captain_id: string | null
+          discord_pinged_at: string | null
+          final_screenshot_url: string | null
+          final_team_a_score: number | null
+          final_team_b_score: number | null
+          game: string
+          id: string
+          status: string
+          team_a_captain_id: string
+          team_a_id: string
+          team_b_captain_id: string | null
+          team_b_id: string | null
+          turn_deadline: string | null
+          updated_at: string
+          veto_state: Json
+        }
+        SetofOptions: {
+          from: "*"
+          to: "scrim_lobbies"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      submit_veto_action: {
+        Args: { _lobby_id: string; _map: string }
+        Returns: {
+          created_at: string
+          current_turn_captain_id: string | null
+          discord_pinged_at: string | null
+          final_screenshot_url: string | null
+          final_team_a_score: number | null
+          final_team_b_score: number | null
+          game: string
+          id: string
+          status: string
+          team_a_captain_id: string
+          team_a_id: string
+          team_b_captain_id: string | null
+          team_b_id: string | null
+          turn_deadline: string | null
+          updated_at: string
+          veto_state: Json
+        }
+        SetofOptions: {
+          from: "*"
+          to: "scrim_lobbies"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
