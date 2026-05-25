@@ -34,14 +34,14 @@ export function useTeam() {
   const fetchTeam = async () => {
     if (!user) { setLoading(false); return; }
 
-    // First check if user is a captain
+    const teamCols = "id, captain_id, name, game, rank, region, map_pool, reliability_score";
+
     let { data: teamData } = await supabase
       .from("teams")
-      .select("*")
+      .select(teamCols)
       .eq("captain_id", user.id)
       .maybeSingle();
 
-    // If not a captain, find team via team_members
     if (!teamData) {
       const { data: memberRow } = await supabase
         .from("team_members")
@@ -52,7 +52,7 @@ export function useTeam() {
       if (memberRow) {
         const { data: t } = await supabase
           .from("teams")
-          .select("*")
+          .select(teamCols)
           .eq("id", memberRow.team_id)
           .maybeSingle();
         teamData = t;
@@ -60,8 +60,14 @@ export function useTeam() {
     }
 
     if (teamData) {
+      // Fetch sensitive columns via SECURITY DEFINER RPC (members only)
+      const { data: secrets } = await supabase.rpc("get_my_team_secrets", { _team_id: teamData.id });
+      const s = Array.isArray(secrets) ? secrets[0] : null;
+
       setTeam({
         ...teamData,
+        join_code: s?.join_code ?? "",
+        discord_webhook_url: (s?.discord_webhook_url ?? null) as any,
         map_pool: (teamData.map_pool as Record<string, string | null>) ?? {},
       });
 
