@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Public can view match screenshots" ON storage.objects;
