@@ -58,7 +58,7 @@ export default function Onboarding() {
           region: region || null,
           map_pool: mapPool,
         })
-        .select()
+        .select("id")
         .single();
 
       if (teamErr) throw teamErr;
@@ -74,7 +74,9 @@ export default function Onboarding() {
       }]);
       if (memberErr) throw memberErr;
 
-      setJoinCode(team.join_code);
+      const { data: secrets } = await supabase.rpc("get_my_team_secrets", { _team_id: team.id });
+      const code = Array.isArray(secrets) && secrets[0]?.join_code ? secrets[0].join_code : "";
+      setJoinCode(code);
       setStep(3);
       toast.success("Team created successfully!");
     } catch (err: any) {
