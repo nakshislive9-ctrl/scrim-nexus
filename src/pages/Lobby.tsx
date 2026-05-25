@@ -100,11 +100,7 @@ export default function Lobby() {
       return;
     }
     setJoining(true);
-    const { error } = await supabase
-      .from("scrim_lobbies")
-      .update({ team_b_id: myTeam.id, team_b_captain_id: user.id })
-      .eq("id", lobby.id)
-      .is("team_b_id", null);
+    const { error } = await supabase.rpc("join_scrim_lobby", { _lobby_id: lobby.id });
     setJoining(false);
     if (error) {
       toast({ title: "Couldn't join", description: error.message, variant: "destructive" });
