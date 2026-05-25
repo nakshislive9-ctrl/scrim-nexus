@@ -10,6 +10,7 @@ export interface Team {
   rank: string;
   region: string | null;
   join_code: string;
+  discord_webhook_url: string | null;
   map_pool: Record<string, string | null>;
   reliability_score: number;
 }
