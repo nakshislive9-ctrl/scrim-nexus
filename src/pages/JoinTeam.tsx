@@ -21,14 +21,10 @@ export default function JoinTeam() {
     if (team) { setStatus("already"); return; }
 
     const fetchTeam = async () => {
-      const { data } = await supabase
-        .from("teams")
-        .select("id, name, game, rank, join_code")
-        .eq("join_code", code)
-        .maybeSingle();
-
-      if (!data) { setStatus("error"); setError("Team not found or invalid invite code."); return; }
-      setTeamInfo({ name: data.name, game: data.game, rank: data.rank });
+      const { data } = await supabase.rpc("find_team_by_join_code", { _code: code });
+      const row = Array.isArray(data) ? data[0] : null;
+      if (!row) { setStatus("error"); setError("Team not found or invalid invite code."); return; }
+      setTeamInfo({ name: row.name, game: row.game, rank: row.rank });
       setStatus("confirm");
     };
     fetchTeam();
@@ -38,11 +34,8 @@ export default function JoinTeam() {
     if (!code || !user) return;
     setStatus("loading");
 
-    const { data: teamData } = await supabase
-      .from("teams")
-      .select("id")
-      .eq("join_code", code)
-      .maybeSingle();
+    const { data: lookup } = await supabase.rpc("find_team_by_join_code", { _code: code });
+    const teamData = Array.isArray(lookup) ? lookup[0] : null;
 
     if (!teamData) { setStatus("error"); setError("Team not found."); return; }
 
