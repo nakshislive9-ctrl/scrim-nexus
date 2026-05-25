@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      lobby_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          lobby_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          lobby_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          lobby_id?: string
+          sender_id?: string
+        }
+        Relationships: []
+      }
       lobby_results: {
         Row: {
           created_at: string
@@ -627,6 +651,10 @@ export type Database = {
           discord_webhook_url: string
           join_code: string
         }[]
+      }
+      is_lobby_participant: {
+        Args: { _lobby_id: string; _user_id: string }
+        Returns: boolean
       }
       is_team_member: {
         Args: { _team_id: string; _user_id: string }
