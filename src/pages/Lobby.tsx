@@ -23,6 +23,7 @@ interface Lobby {
   veto_state: any;
   current_turn_captain_id: string | null;
   turn_deadline: string | null;
+  scheduled_at: string | null;
 }
 
 interface TeamLite {
