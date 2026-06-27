@@ -94,6 +94,15 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Server-side SSRF guard: only allow official Discord webhook URLs
+    const ALLOWED_WEBHOOK = /^https:\/\/(canary\.|ptb\.)?discord(app)?\.com\/api\/webhooks\//i;
+    if (!ALLOWED_WEBHOOK.test(webhook)) {
+      return new Response(JSON.stringify({ error: "invalid_webhook_domain" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const lobbyUrl = `${req.headers.get("origin") ?? ""}/lobby/${lobby.id}`;
 
     const payload = {
@@ -138,7 +147,8 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    return new Response(JSON.stringify({ error: String(e) }), {
+    console.error("discord-ping-lobby error:", e);
+    return new Response(JSON.stringify({ error: "internal_error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
