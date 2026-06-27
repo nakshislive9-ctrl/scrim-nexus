@@ -155,26 +155,8 @@ export function MatchResult({
       return;
     }
 
-    // After insert/update, check if both captains agree → finalize lobby
-    const { data: latest } = await supabase
-      .from("lobby_results")
-      .select("*")
-      .eq("lobby_id", lobbyId);
-
-    const rows = (latest as ResultRow[]) ?? [];
-    if (rows.length === 2) {
-      const [r1, r2] = rows;
-      const match = r1.team_a_score === r2.team_a_score && r1.team_b_score === r2.team_b_score;
-      await supabase
-        .from("scrim_lobbies")
-        .update({
-          status: match ? "completed" : "disputed",
-          final_team_a_score: match ? r1.team_a_score : null,
-          final_team_b_score: match ? r1.team_b_score : null,
-          final_screenshot_url: match ? (r1.screenshot_url ?? r2.screenshot_url) : null,
-        })
-        .eq("id", lobbyId);
-    }
+    // Finalization is enforced server-side; this RPC verifies both captains agree.
+    await supabase.rpc("finalize_lobby_result", { _lobby_id: lobbyId });
 
     setSubmitting(false);
     toast({ title: "Result submitted" });
