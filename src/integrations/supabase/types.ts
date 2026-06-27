@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.4"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -301,6 +301,7 @@ export type Database = {
           final_team_b_score: number | null
           game: string
           id: string
+          scheduled_at: string | null
           status: string
           team_a_captain_id: string
           team_a_id: string
@@ -319,6 +320,7 @@ export type Database = {
           final_team_b_score?: number | null
           game: string
           id?: string
+          scheduled_at?: string | null
           status?: string
           team_a_captain_id: string
           team_a_id: string
@@ -337,6 +339,7 @@ export type Database = {
           final_team_b_score?: number | null
           game?: string
           id?: string
+          scheduled_at?: string | null
           status?: string
           team_a_captain_id?: string
           team_a_id?: string
@@ -671,6 +674,7 @@ export type Database = {
           final_team_b_score: number | null
           game: string
           id: string
+          scheduled_at: string | null
           status: string
           team_a_captain_id: string
           team_a_id: string
@@ -698,6 +702,7 @@ export type Database = {
           final_team_b_score: number | null
           game: string
           id: string
+          scheduled_at: string | null
           status: string
           team_a_captain_id: string
           team_a_id: string
@@ -725,6 +730,7 @@ export type Database = {
           final_team_b_score: number | null
           game: string
           id: string
+          scheduled_at: string | null
           status: string
           team_a_captain_id: string
           team_a_id: string
