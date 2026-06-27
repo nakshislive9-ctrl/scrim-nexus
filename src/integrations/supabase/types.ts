@@ -301,6 +301,7 @@ export type Database = {
           final_team_b_score: number | null
           game: string
           id: string
+          scheduled_at: string | null
           status: string
           team_a_captain_id: string
           team_a_id: string
@@ -319,6 +320,7 @@ export type Database = {
           final_team_b_score?: number | null
           game: string
           id?: string
+          scheduled_at?: string | null
           status?: string
           team_a_captain_id: string
           team_a_id: string
@@ -337,6 +339,7 @@ export type Database = {
           final_team_b_score?: number | null
           game?: string
           id?: string
+          scheduled_at?: string | null
           status?: string
           team_a_captain_id?: string
           team_a_id?: string
@@ -671,6 +674,7 @@ export type Database = {
           final_team_b_score: number | null
           game: string
           id: string
+          scheduled_at: string | null
           status: string
           team_a_captain_id: string
           team_a_id: string
@@ -698,6 +702,7 @@ export type Database = {
           final_team_b_score: number | null
           game: string
           id: string
+          scheduled_at: string | null
           status: string
           team_a_captain_id: string
           team_a_id: string
@@ -725,6 +730,7 @@ export type Database = {
           final_team_b_score: number | null
           game: string
           id: string
+          scheduled_at: string | null
           status: string
           team_a_captain_id: string
           team_a_id: string
