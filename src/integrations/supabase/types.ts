@@ -638,6 +638,34 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      finalize_lobby_result: {
+        Args: { _lobby_id: string }
+        Returns: {
+          created_at: string
+          current_turn_captain_id: string | null
+          discord_pinged_at: string | null
+          final_screenshot_url: string | null
+          final_team_a_score: number | null
+          final_team_b_score: number | null
+          game: string
+          id: string
+          scheduled_at: string | null
+          status: string
+          team_a_captain_id: string
+          team_a_id: string
+          team_b_captain_id: string | null
+          team_b_id: string | null
+          turn_deadline: string | null
+          updated_at: string
+          veto_state: Json
+        }
+        SetofOptions: {
+          from: "*"
+          to: "scrim_lobbies"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       find_team_by_join_code: {
         Args: { _code: string }
         Returns: {
