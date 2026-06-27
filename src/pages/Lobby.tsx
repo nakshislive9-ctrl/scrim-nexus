@@ -245,6 +245,39 @@ export default function Lobby() {
   );
 }
 
+function WaitingRoomGate({ scheduledAt, children }: { scheduledAt: string | null; children: React.ReactNode }) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  if (!scheduledAt) return <>{children}</>;
+
+  const startMs = new Date(scheduledAt).getTime();
+  const opensAt = startMs - 10 * 60 * 1000;
+  const msUntilOpen = opensAt - now;
+
+  if (msUntilOpen <= 0) return <>{children}</>;
+
+  const totalSec = Math.ceil(msUntilOpen / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const countdown = h > 0 ? `${h}h ${m}m ${s}s` : `${m}m ${s}s`;
+  const startStr = new Date(scheduledAt).toLocaleString();
+
+  return (
+    <div className="glass-panel p-8 text-center">
+      <p className="text-xs font-mono text-primary uppercase tracking-wider mb-2">Waiting Room</p>
+      <h3 className="text-lg font-bold mb-2">Opens 10 minutes before match start</h3>
+      <p className="text-sm text-muted-foreground mb-4">Match scheduled for {startStr}</p>
+      <div className="text-3xl font-mono font-bold text-primary tabular-nums">{countdown}</div>
+      <p className="text-xs text-muted-foreground mt-3">Team chat and roster check-in will unlock automatically.</p>
+    </div>
+  );
+}
+
 function SlotCard({
   label,
   team,
